@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class='container-fluid'>
+   <h2>{{ tournament.name }}</h2>
+   <h3>Add Players</h3>
+	<form method="POST">
+	   {% csrf_token %}
+	   {{ form.as_p }}
+	   
+	   <input type='submit' value='submit'/>
+	</form>
+  </div>
+{% endblock %}
+

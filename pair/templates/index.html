@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <ul class='list-group'>
+   {% for tournament in tournaments %}
+    <li class='list-group-item'><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></li>
+   {% endfor %}
+  </ul>
+  <a href="start/" class="btn btn-primary">New tournament</a>
+{% endblock %}
