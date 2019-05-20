@@ -23,14 +23,14 @@ var Settings = function (_React$Component) {
 	_createClass(Settings, [{
 		key: 'handleChange',
 		value: function handleChange(evt, idx) {
-			tournament = Object.assign({}, this.state.tournament);
+			var tournament = Object.assign({}, this.state.tournament);
 			tournament.rounds[idx][evt.target.name] = evt.target.value;
 			this.setState({ tournament: tournament });
 		}
 	}, {
 		key: 'titleChange',
 		value: function titleChange(evt) {
-			tournament = Object.assign({}, this.state.tournament);
+			var tournament = Object.assign({}, this.state.tournament);
 			tournament.name = evt.target.value;
 			this.setState({ tournament: tournament });
 		}
@@ -56,14 +56,14 @@ var Settings = function (_React$Component) {
 	}, {
 		key: 'ratedChanged',
 		value: function ratedChanged(evt) {
-			tournament = Object.assign({}, this.state.tournament);
+			var tournament = Object.assign({}, this.state.tournament);
 			tournament.rated = evt.target.value;
 			this.setState({ 'tournament': tournament });
 		}
 	}, {
 		key: 'dateChange',
 		value: function dateChange(evt) {
-			tournament = Object.assign({}, this.state.tournament);
+			var tournament = Object.assign({}, this.state.tournament);
 			tournament.start_date = evt.target.value;
 			this.setState({ 'tournament': tournament });
 		}

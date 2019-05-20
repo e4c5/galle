@@ -71,7 +71,7 @@ def start(request, slug=None):
     '''
     Start a new tournament
     '''
-    print(slug)
+
     if slug:
         tournament = Tournament.objects.get(slug=slug)
         form = forms.PlayerForm(request.POST)
