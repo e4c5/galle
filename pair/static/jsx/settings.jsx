@@ -16,10 +16,13 @@ class Settings extends React.Component {
 		this.setState({tournament: tournament});
 	}
 	
+	/**
+	 * Event listener for the number of rounds control
+	 */
 	roundsChange(evt) {
 		let target = evt.target;
 		if(target.value > 0 && target.value < 51) {
-			tournament = Object.assign({}, this.state.tournament)
+			let tournament = Object.assign({}, this.state.tournament)
 			if(target.value > tournament.rounds.length) {
 				for(var i = tournament.rounds.length ; i < target.value ; i ++) {
 					tournament.rounds.push({based_on: i, round_no: i + 1,
@@ -33,7 +36,7 @@ class Settings extends React.Component {
 		}
 		else {
 			this.setState({'errors': 'The number of rounds should be less than 50 and more than 0'})
-		}
+		} 
 	}
 	
 	ratedChanged(evt) {
@@ -47,6 +50,7 @@ class Settings extends React.Component {
 		tournament.start_date = evt.target.value;
 		this.setState({'tournament': tournament})
 	}
+	
 	submitForm(evt) {
 		evt.preventDefault();
 		this.props.updateTournament(evt, this.state.tournament);
@@ -76,12 +80,12 @@ class Settings extends React.Component {
 						 
 						    <div className='col-2'>Number of rounds</div>
 						    <div className='col-2'><input type="number" onChange={evt => this.roundsChange(evt)} className='form-control' /></div>
-						    <div className='col-2 btn-group btn-group-toggle' data-toggle="buttons">
+						    <div className="btn-group btn-group-toggle" data-toggle="buttons">
 						       <label className="btn btn-secondary active">
-						    	 <input type='radio' className='form-control' value='rated' id="rated" onChange={evt => this.ratedChanged(evt)} name='rated' checked /> Rated
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' checked /> Rated
 						       </label>
 						       <label className="btn btn-secondary">	 
-						    	 <input type='radio' className='form-control' value='unrated' id="unrated" onChange={evt => this.ratedChanged(evt)} name='rated'/> Unrated
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' /> Unrated
 						       </label>
 						    </div>
 						</div>
