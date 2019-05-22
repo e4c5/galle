@@ -290,7 +290,9 @@ var Controller = function (_React$Component2) {
 							}
 						}),
 						React.createElement(Route, { path: window.location.pathname + "player/:id/",
-							component: Bada
+							render: function render(props) {
+								return React.createElement(PlayerStanding, _extends({}, props, { tournament_id: _this5.props.tournament_id }));
+							}
 						})
 					)
 				)

@@ -184,8 +184,8 @@ class Controller extends React.Component {
 							 render={props => 
 						       <Settings tournament={this.state.tournament} />}
 					 />      
-						       <Route path={ window.location.pathname + "player/:id/"}
-										component={Bada} 
+					 <Route path={ window.location.pathname + "player/:id/"}
+										render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
 								     />
 			       </Switch>
 						       

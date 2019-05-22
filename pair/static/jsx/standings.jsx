@@ -53,7 +53,7 @@ class Standings extends React.Component {
 	render() {
 		if(this.props.round) {
 	        return (
-	         <Router>
+	         
 	          <div>
 	         
 	          
@@ -72,11 +72,8 @@ class Standings extends React.Component {
 	           </tbody>
 	          </table>
 	          </div>
-			     <Route path={ window.location.pathname + "player/:id/"}
-					render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
-			     />
 			     
-	         </Router>
+			 
 	        );
 		}
 		return null;
