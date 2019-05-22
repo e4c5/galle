@@ -21,7 +21,10 @@ var PlayerStanding = function (_React$Component) {
 	function PlayerStanding(props) {
 		_classCallCheck(this, PlayerStanding);
 
-		return _possibleConstructorReturn(this, (PlayerStanding.__proto__ || Object.getPrototypeOf(PlayerStanding)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (PlayerStanding.__proto__ || Object.getPrototypeOf(PlayerStanding)).call(this, props));
+
+		_this.state = { loaded: false };
+		return _this;
 	}
 	/**
   * Fetch the data when the component has mounted
@@ -33,15 +36,15 @@ var PlayerStanding = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			this.setState({ 'current_player': evt.target.name });
-			axios.get('/api/results/' + this.props.tournament_id + '/', { params: { player: props } }).then(function (response) {
-				_this2.setState({ 'results': response.data });
+			axios.get('/api/results/' + this.props.tournament_id + '/?player=' + this.props.match.params.id).then(function (response) {
+				_this2.setState({ 'results': response.data, 'loaded': true });
 			});
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			if (this.state.current_player) {
+
+			if (this.state.loaded) {
 				return React.createElement(
 					'div',
 					null,
@@ -55,7 +58,7 @@ var PlayerStanding = function (_React$Component) {
 						{ className: 'table table-bordered' },
 						React.createElement(
 							'thead',
-							{ classNane: 'thead-light' },
+							{ className: 'thead-light' },
 							React.createElement(
 								'tr',
 								null,
@@ -124,6 +127,11 @@ var PlayerStanding = function (_React$Component) {
 					)
 				);
 			}
+			return React.createElement(
+				'div',
+				null,
+				'Loading....'
+			);
 		}
 	}]);
 
@@ -151,90 +159,83 @@ var Standings = function (_React$Component2) {
 		value: function render() {
 			if (this.props.round) {
 				return React.createElement(
-					Router,
+					'div',
 					null,
 					React.createElement(
-						'div',
-						null,
-						this.props.standings.map(function (item, idx) {
-							return null;
-						}),
+						'table',
+						{ className: 'table' },
 						React.createElement(
-							'table',
-							{ className: 'table' },
+							'thead',
+							null,
 							React.createElement(
-								'thead',
+								'tr',
 								null,
 								React.createElement(
-									'tr',
+									'th',
 									null,
-									React.createElement(
-										'th',
-										null,
-										'Position'
-									),
-									React.createElement(
-										'th',
-										null,
-										'Player'
-									),
-									React.createElement(
-										'th',
-										null,
-										'Wins'
-									),
-									React.createElement(
-										'th',
-										null,
-										'Losses'
-									),
-									React.createElement(
-										'th',
-										null,
-										'Spread'
-									)
+									'Position'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Player'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Wins'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Losses'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Spread'
 								)
-							),
-							React.createElement(
-								'tbody',
-								null,
-								this.props.standings.map(function (item, idx) {
-									return React.createElement(
-										'tr',
-										{ key: item.player },
-										React.createElement(
-											'td',
-											null,
-											idx + 1
-										),
-										React.createElement(
-											'td',
-											null,
-											React.createElement(
-												Link,
-												{ to: item.id.toString() },
-												item.player
-											),
-											' '
-										),
-										React.createElement(
-											'td',
-											null,
-											item.wins
-										),
-										React.createElement(
-											'td',
-											null,
-											item.games - item.wins
-										),
-										React.createElement(
-											'td',
-											null,
-											item.spread
-										)
-									);
-								})
 							)
+						),
+						React.createElement(
+							'tbody',
+							null,
+							this.props.standings.map(function (item, idx) {
+								return React.createElement(
+									'tr',
+									{ key: item.player },
+									React.createElement(
+										'td',
+										null,
+										idx + 1
+									),
+									React.createElement(
+										'td',
+										null,
+										React.createElement(
+											Link,
+											{ to: window.location.pathname + 'player/' + item.id.toString() + '/' },
+											item.player
+										),
+										' '
+									),
+									React.createElement(
+										'td',
+										null,
+										item.wins
+									),
+									React.createElement(
+										'td',
+										null,
+										item.games - item.wins
+									),
+									React.createElement(
+										'td',
+										null,
+										item.spread
+									)
+								);
+							})
 						)
 					)
 				);

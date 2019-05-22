@@ -97,7 +97,7 @@ class Tournament(models.Model):
     start_date = models.TextField()
     name = models.TextField()
     rated = models.IntegerField(default=True)
-    slug = models.TextField(unique=True)
+    slug = models.TextField(unique=True, blank=True)
 
     players = models.ManyToManyField(Player, through='Participant')
 

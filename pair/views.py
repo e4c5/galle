@@ -40,7 +40,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         
         player = self.request.query_params.get('player')
         if player:
-            return qs.filter(participant__player__full_name=player)
+            return qs.filter(participant__player__id=player)
         return qs
     
     def update(self, request, *args, **kwargs):

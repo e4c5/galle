@@ -8,23 +8,24 @@ const Redirect = window.ReactRouterDOM.Redirect;
 class PlayerStanding extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {loaded: false};
 	}
 	/**
 	 * Fetch the data when the component has mounted
 	 */
 	componentDidMount() {
-		this.setState({'current_player': evt.target.name})
-		axios.get(`/api/results/${this.props.tournament_id}/`, 
-				{params: {player: props}}).then(response => {
-					this.setState({'results': response.data});
+		
+		axios.get(`/api/results/${this.props.tournament_id}/?player=${this.props.match.params.id}`).then(response => {
+			this.setState({'results': response.data, 'loaded': true});
 		});
 	}
 
 	render() {
-		if(this.state.current_player) {
+		
+		if(this.state.loaded) {
 			return(<div><h1>{this.state.current_player}</h1>
 				<table className='table table-bordered'>  
-				  <thead classNane='thead-light'><tr><th>Round</th><th>Opponent</th><th>Score</th><th>Opponent Score</th><th>Spread</th></tr></thead>
+				  <thead className='thead-light'><tr><th>Round</th><th>Opponent</th><th>Score</th><th>Opponent Score</th><th>Spread</th></tr></thead>
 					<tbody>
 					  {this.state.results.map(item=>(
 						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}>
@@ -36,6 +37,8 @@ class PlayerStanding extends React.Component {
 					</tbody>
 				</table></div>)
 		}
+		return (<div>Loading....</div>)
+		
 	}
 }
 /**
@@ -50,11 +53,9 @@ class Standings extends React.Component {
 	render() {
 		if(this.props.round) {
 	        return (
-	         <Router>
+	         
 	          <div>
-	          {this.props.standings.map((item, idx) => 
-			   (null)
-			)}
+	         
 	          
 	          <table className='table'>
 	            <thead><tr><th>Position</th><th>Player</th><th>Wins</th><th>Losses</th><th>Spread</th></tr></thead>
@@ -62,7 +63,7 @@ class Standings extends React.Component {
 					{this.props.standings.map((item, idx) => 
 					   (<tr key={item.player}>
 					    <td>{idx + 1}</td>
-						<td><Link to={item.id.toString()}>{item.player}</Link> </td>
+						<td><Link to={window.location.pathname + 'player/' + item.id.toString() + '/'}>{item.player}</Link> </td>
 						<td>{item.wins}</td>
 						<td>{item.games - item.wins}</td>
 						<td>{item.spread}</td>
@@ -71,7 +72,8 @@ class Standings extends React.Component {
 	           </tbody>
 	          </table>
 	          </div>
-	         </Router>
+			     
+			 
 	        );
 		}
 		return null;

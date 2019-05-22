@@ -34,12 +34,17 @@ var Settings = function (_React$Component) {
 			tournament.name = evt.target.value;
 			this.setState({ tournament: tournament });
 		}
+
+		/**
+   * Event listener for the number of rounds control
+   */
+
 	}, {
 		key: 'roundsChange',
 		value: function roundsChange(evt) {
 			var target = evt.target;
 			if (target.value > 0 && target.value < 51) {
-				tournament = Object.assign({}, this.state.tournament);
+				var tournament = Object.assign({}, this.state.tournament);
 				if (target.value > tournament.rounds.length) {
 					for (var i = tournament.rounds.length; i < target.value; i++) {
 						tournament.rounds.push({ based_on: i, round_no: i + 1,
@@ -139,11 +144,11 @@ var Settings = function (_React$Component) {
 							),
 							React.createElement(
 								'div',
-								{ className: 'col-2 btn-group btn-group-toggle', 'data-toggle': 'buttons' },
+								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
 								React.createElement(
 									'label',
 									{ className: 'btn btn-secondary active' },
-									React.createElement('input', { type: 'radio', className: 'form-control', value: 'rated', id: 'rated', onChange: function onChange(evt) {
+									React.createElement('input', { type: 'radio', onChange: function onChange(evt) {
 											return _this2.ratedChanged(evt);
 										}, name: 'rated', checked: true }),
 									' Rated'
@@ -151,7 +156,7 @@ var Settings = function (_React$Component) {
 								React.createElement(
 									'label',
 									{ className: 'btn btn-secondary' },
-									React.createElement('input', { type: 'radio', className: 'form-control', value: 'unrated', id: 'unrated', onChange: function onChange(evt) {
+									React.createElement('input', { type: 'radio', onChange: function onChange(evt) {
 											return _this2.ratedChanged(evt);
 										}, name: 'rated' }),
 									' Unrated'
