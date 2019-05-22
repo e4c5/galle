@@ -166,12 +166,13 @@ class Controller extends React.Component {
 		           <Link className="nav-link" to={window.location.pathname + 'draw'}>Draw</Link>
 		           <Link className="nav-link" to={window.location.pathname + 'settings'}>Settings</Link>
 		        </nav>
-    	         
-			    	<Route path={window.location.pathname + '/'}
-			       	 render={(props) => <Standings standings={this.state.standings} round={this.state.round} tournament_id={this.props.tournament_id}/>}
+		        <Switch>
+      
+			    	<Route exact path={window.location.pathname }
+			       	 render={(props) => <Standings {...props} standings={this.state.standings} round={this.state.round} tournament_id={this.props.tournament_id} /> }
 					 />
 			        <Route path={window.location.pathname + 'pairing'}
-			       	 render={(props) => 
+			        	 render={(props) => 
 					  	   <Pairing round={this.props.round} tournament_id={this.props.tournament_id} 
 					  	       completed={this.state.completed} pending={this.state.pending} submitResult={this.submitResult}/>}
 					 />
@@ -183,9 +184,14 @@ class Controller extends React.Component {
 							 render={props => 
 						       <Settings tournament={this.state.tournament} />}
 					 />      
-			  </div>
-			 </Router>	
-			)
+						       <Route path={ window.location.pathname + "player/:id/"}
+										component={Bada} 
+								     />
+			       </Switch>
+						       
+		  </div>
+	     </Router>	
+		)
 	}
 }
 

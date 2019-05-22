@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,7 +23,10 @@ var PlayerStanding = function (_React$Component) {
 	function PlayerStanding(props) {
 		_classCallCheck(this, PlayerStanding);
 
-		return _possibleConstructorReturn(this, (PlayerStanding.__proto__ || Object.getPrototypeOf(PlayerStanding)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (PlayerStanding.__proto__ || Object.getPrototypeOf(PlayerStanding)).call(this, props));
+
+		_this.state = { loaded: false };
+		return _this;
 	}
 	/**
   * Fetch the data when the component has mounted
@@ -33,15 +38,15 @@ var PlayerStanding = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			this.setState({ 'current_player': evt.target.name });
-			axios.get('/api/results/' + this.props.tournament_id + '/', { params: { player: props } }).then(function (response) {
-				_this2.setState({ 'results': response.data });
+			axios.get('/api/results/' + this.props.tournament_id + '/?player=' + this.props.match.params.id).then(function (response) {
+				_this2.setState({ 'results': response.data, 'loaded': true });
 			});
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			if (this.state.current_player) {
+
+			if (this.state.loaded) {
 				return React.createElement(
 					'div',
 					null,
@@ -55,7 +60,7 @@ var PlayerStanding = function (_React$Component) {
 						{ className: 'table table-bordered' },
 						React.createElement(
 							'thead',
-							{ classNane: 'thead-light' },
+							{ className: 'thead-light' },
 							React.createElement(
 								'tr',
 								null,
@@ -124,6 +129,11 @@ var PlayerStanding = function (_React$Component) {
 					)
 				);
 			}
+			return React.createElement(
+				'div',
+				null,
+				'Loading....'
+			);
 		}
 	}]);
 
@@ -149,6 +159,8 @@ var Standings = function (_React$Component2) {
 	_createClass(Standings, [{
 		key: 'render',
 		value: function render() {
+			var _this4 = this;
+
 			if (this.props.round) {
 				return React.createElement(
 					Router,
@@ -156,9 +168,6 @@ var Standings = function (_React$Component2) {
 					React.createElement(
 						'div',
 						null,
-						this.props.standings.map(function (item, idx) {
-							return null;
-						}),
 						React.createElement(
 							'table',
 							{ className: 'table' },
@@ -212,7 +221,7 @@ var Standings = function (_React$Component2) {
 											null,
 											React.createElement(
 												Link,
-												{ to: item.id.toString() },
+												{ to: window.location.pathname + 'player/' + item.id.toString() + '/' },
 												item.player
 											),
 											' '
@@ -236,7 +245,12 @@ var Standings = function (_React$Component2) {
 								})
 							)
 						)
-					)
+					),
+					React.createElement(Route, { path: window.location.pathname + "player/:id/",
+						render: function render(props) {
+							return React.createElement(PlayerStanding, _extends({}, props, { tournament_id: _this4.props.tournament_id }));
+						}
+					})
 				);
 			}
 			return null;
