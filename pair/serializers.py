@@ -57,7 +57,7 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Tournament
-        fields = ('id','name', 'start_date', 'rated', 'num_rounds','current_round','rounds',)
+        fields = ('id','name', 'start_date', 'rated', 'num_rounds','current_round','rounds','slug')
         
                 
 # update pair_roundresult set score_for = NULL , score_against=NULL where game_id=36
