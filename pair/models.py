@@ -91,7 +91,7 @@ class Player(models.Model):
    
 
 class Tournament(models.Model):
-    ''' A tournament can sometimes have many sections, they can be rate or unrates.
+    ''' A tournament can sometimes have many sections, they can be rated or unrated.
     But one thing for sure they will have at least two players
     '''
     start_date = models.TextField()
@@ -163,8 +163,10 @@ class TournamentRound(models.Model):
     SWISS = "SWISS"
     KOTH = "KOTH"
     RANDOM = "RANDOM"
+    MANUAL = "MANUAL"
+    
     PAIRING_CHOICES = ([ROUND_ROBIN, 'Round Robin'], [SWISS, 'Swiss'],
-                       [KOTH, 'KOTH'], [RANDOM, 'Random'])
+                       [KOTH, 'KOTH'], [RANDOM, 'Random'], [MANUAL,"Manual"])
     
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rounds')
     round_no = models.IntegerField()
