@@ -96,11 +96,14 @@ def import_tsh(request):
             data = request.FILES['at_file'].read().decode('utf-8')
             tourney, created = tsh_to_json.process_config_tsh(config)
             if created:
-                redirect('/')
+                games = tsh_to_json.json_to_tsh(data)
                 
+                redirect('/')
+            else :
+                message = 'A tournament by that name already exists'    
     else:
         form = forms.UploadForm()
-    return render(request, 'import.html', {'form': form})
+    return render(request, 'import.html', {'form': form, 'message': message})
 
         
 def tournament(request, slug):

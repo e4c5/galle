@@ -4,6 +4,8 @@
   <div class='container-fluid'>
    <h2>Start new tournament</h2>
     <div id='root'>
+       {% if message %}
+       <p>{{ message }}</p>
        <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          {{ form.as_p }}
