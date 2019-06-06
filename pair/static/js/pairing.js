@@ -1,5 +1,7 @@
 'use strict';
 
+var _jsxFileName = 'pair/static/jsx/pairing.jsx';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23,42 +25,96 @@ var ResultTable = function (_React$Component) {
 	_createClass(ResultTable, [{
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
 			return React.createElement(
 				'table',
-				{ className: 'table' },
+				{ className: 'table', __source: {
+						fileName: _jsxFileName,
+						lineNumber: 10
+					},
+					__self: this
+				},
 				React.createElement(
 					'thead',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 11
+						},
+						__self: this
+					},
 					React.createElement(
 						'tr',
-						null,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 11
+							},
+							__self: this
+						},
 						React.createElement(
 							'th',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 11
+								},
+								__self: this
+							},
 							'Player'
 						),
 						React.createElement(
 							'th',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 11
+								},
+								__self: this
+							},
 							'Score for'
 						),
 						React.createElement(
 							'th',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 11
+								},
+								__self: this
+							},
 							'Opponent'
 						),
 						React.createElement(
 							'th',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 11
+								},
+								__self: this
+							},
 							'Score Against'
 						)
 					)
 				),
 				React.createElement(
 					'tbody',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 12
+						},
+						__self: this
+					},
 					this.props.items.map(function (item) {
-						return React.createElement(TableRow, { pairing: item, key: item.participant });
+						return React.createElement(TableRow, { pairing: item, key: item.participant, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 14
+							},
+							__self: _this2
+						});
 					})
 				)
 			);
@@ -79,10 +135,10 @@ var TableRow = function (_React$Component2) {
 	function TableRow(props) {
 		_classCallCheck(this, TableRow);
 
-		var _this2 = _possibleConstructorReturn(this, (TableRow.__proto__ || Object.getPrototypeOf(TableRow)).call(this, props));
+		var _this3 = _possibleConstructorReturn(this, (TableRow.__proto__ || Object.getPrototypeOf(TableRow)).call(this, props));
 
-		_this2.state = { 'pairing': props.pairing };
-		return _this2;
+		_this3.state = { 'pairing': props.pairing };
+		return _this3;
 	}
 
 	_createClass(TableRow, [{
@@ -91,25 +147,55 @@ var TableRow = function (_React$Component2) {
 			var pairing = this.state.pairing;
 			return React.createElement(
 				'tr',
-				null,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 31
+					},
+					__self: this
+				},
 				React.createElement(
 					'td',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 32
+						},
+						__self: this
+					},
 					pairing.participant
 				),
 				React.createElement(
 					'td',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 33
+						},
+						__self: this
+					},
 					pairing.score_for
 				),
 				React.createElement(
 					'td',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 34
+						},
+						__self: this
+					},
 					pairing.opponent
 				),
 				React.createElement(
 					'td',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 35
+						},
+						__self: this
+					},
 					pairing.score_against
 				)
 			);
@@ -130,12 +216,12 @@ var Pairing = function (_React$Component3) {
 	function Pairing(props) {
 		_classCallCheck(this, Pairing);
 
-		var _this3 = _possibleConstructorReturn(this, (Pairing.__proto__ || Object.getPrototypeOf(Pairing)).call(this, props));
+		var _this4 = _possibleConstructorReturn(this, (Pairing.__proto__ || Object.getPrototypeOf(Pairing)).call(this, props));
 
-		_this3.state = { 'current': '', 'matching': [] };
-		_this3.handleSubmit = _this3.handleSubmit.bind(_this3);
-		_this3.handleChange = _this3.handleChange.bind(_this3);
-		return _this3;
+		_this4.state = { 'current': '', 'matching': [] };
+		_this4.handleSubmit = _this4.handleSubmit.bind(_this4);
+		_this4.handleChange = _this4.handleChange.bind(_this4);
+		return _this4;
 	}
 
 	_createClass(Pairing, [{
@@ -179,38 +265,75 @@ var Pairing = function (_React$Component3) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var matching = this.state.matching;
 
 			return React.createElement(
 				'div',
-				null,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 85
+					},
+					__self: this
+				},
 				React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 86
+						},
+						__self: this
+					},
 					React.createElement(
 						'form',
 						{ onSubmit: function onSubmit(evt) {
-								return _this4.handleSubmit(evt);
-							} },
+								return _this5.handleSubmit(evt);
+							}, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 87
+							},
+							__self: this
+						},
 						React.createElement(
 							'div',
-							{ className: 'formGroup' },
+							{ className: 'formGroup', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 88
+								},
+								__self: this
+							},
 							React.createElement('input', { className: 'form-control', type: 'text', value: this.state.current,
 								placeholder: 'name score-for score-against',
 								onChange: function onChange(evt) {
-									return _this4.handleChange(evt);
-								} })
+									return _this5.handleChange(evt);
+								}, __source: {
+									fileName: _jsxFileName,
+									lineNumber: 89
+								},
+								__self: this
+							})
 						)
 					),
 					React.createElement(
 						'ul',
-						{ className: 'list-group hints' },
+						{ className: 'list-group hints', __source: {
+								fileName: _jsxFileName,
+								lineNumber: 94
+							},
+							__self: this
+						},
 						matching.map(function (item) {
 							return React.createElement(
 								'li',
-								{ className: matching.length == 1 ? "active list-group-item" : "list-group-item", key: item.participant },
+								{ className: matching.length == 1 ? "active list-group-item" : "list-group-item", key: item.participant, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 96
+									},
+									__self: _this5
+								},
 								item.participant,
 								' vs ',
 								item.opponent,
@@ -219,17 +342,39 @@ var Pairing = function (_React$Component3) {
 						})
 					)
 				),
-				React.createElement(ResultTable, { items: this.props.completed }),
+				React.createElement(ResultTable, { items: this.props.completed, __source: {
+						fileName: _jsxFileName,
+						lineNumber: 100
+					},
+					__self: this
+				}),
 				React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 101
+						},
+						__self: this
+					},
 					React.createElement(
 						'h3',
-						null,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 101
+							},
+							__self: this
+						},
 						'Awaiting results...'
 					)
 				),
-				React.createElement(ResultTable, { items: this.props.pending })
+				React.createElement(ResultTable, { items: this.props.pending, __source: {
+						fileName: _jsxFileName,
+						lineNumber: 102
+					},
+					__self: this
+				})
 			);
 		}
 	}]);

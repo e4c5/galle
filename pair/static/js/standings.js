@@ -1,5 +1,7 @@
 'use strict';
 
+var _jsxFileName = 'pair/static/jsx/standings.jsx';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43,82 +45,182 @@ var PlayerStanding = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this3 = this;
 
 			if (this.state.loaded) {
 				return React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 26
+						},
+						__self: this
+					},
 					React.createElement(
 						'h1',
-						null,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 26
+							},
+							__self: this
+						},
 						this.state.current_player
 					),
 					React.createElement(
 						'table',
-						{ className: 'table table-bordered' },
+						{ className: 'table table-bordered', __source: {
+								fileName: _jsxFileName,
+								lineNumber: 27
+							},
+							__self: this
+						},
 						React.createElement(
 							'thead',
-							{ className: 'thead-light' },
+							{ className: 'thead-light', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 28
+								},
+								__self: this
+							},
 							React.createElement(
 								'tr',
-								null,
+								{
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 28
+									},
+									__self: this
+								},
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 28
+										},
+										__self: this
+									},
 									'Round'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 28
+										},
+										__self: this
+									},
 									'Opponent'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 28
+										},
+										__self: this
+									},
 									'Score'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 28
+										},
+										__self: this
+									},
 									'Opponent Score'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 28
+										},
+										__self: this
+									},
 									'Spread'
 								)
 							)
 						),
 						React.createElement(
 							'tbody',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 29
+								},
+								__self: this
+							},
 							this.state.results.map(function (item) {
 								return React.createElement(
 									'tr',
-									{ key: item.id, className: item.score_for > item.score_against ? "table-success" : "table-warning" },
+									{ key: item.id, className: item.score_for > item.score_against ? "table-success" : "table-warning", __source: {
+											fileName: _jsxFileName,
+											lineNumber: 31
+										},
+										__self: _this3
+									},
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 32
+											},
+											__self: _this3
+										},
 										item.round
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 32
+											},
+											__self: _this3
+										},
 										item.opponent
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 33
+											},
+											__self: _this3
+										},
 										item.score_for
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 33
+											},
+											__self: _this3
+										},
 										item.score_against
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 34
+											},
+											__self: _this3
+										},
 										item.spread
 									)
 								);
@@ -129,7 +231,13 @@ var PlayerStanding = function (_React$Component) {
 			}
 			return React.createElement(
 				'div',
-				null,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 40
+					},
+					__self: this
+				},
 				'Loading....'
 			);
 		}
@@ -148,90 +256,191 @@ var Standings = function (_React$Component2) {
 	function Standings(props) {
 		_classCallCheck(this, Standings);
 
-		var _this3 = _possibleConstructorReturn(this, (Standings.__proto__ || Object.getPrototypeOf(Standings)).call(this, props));
+		var _this4 = _possibleConstructorReturn(this, (Standings.__proto__ || Object.getPrototypeOf(Standings)).call(this, props));
 
-		_this3.state = { current_player: '', results: [] };
-		return _this3;
+		_this4.state = { current_player: '', results: [] };
+		return _this4;
 	}
 
 	_createClass(Standings, [{
 		key: 'render',
 		value: function render() {
+			var _this5 = this;
+
 			if (this.props.round) {
 				return React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 57
+						},
+						__self: this
+					},
 					React.createElement(
 						'table',
-						{ className: 'table' },
+						{ className: 'table', __source: {
+								fileName: _jsxFileName,
+								lineNumber: 60
+							},
+							__self: this
+						},
 						React.createElement(
 							'thead',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 61
+								},
+								__self: this
+							},
 							React.createElement(
 								'tr',
-								null,
+								{
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 61
+									},
+									__self: this
+								},
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										},
+										__self: this
+									},
 									'Position'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										},
+										__self: this
+									},
 									'Player'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										},
+										__self: this
+									},
 									'Wins'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										},
+										__self: this
+									},
 									'Losses'
 								),
 								React.createElement(
 									'th',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										},
+										__self: this
+									},
 									'Spread'
 								)
 							)
 						),
 						React.createElement(
 							'tbody',
-							null,
+							{
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 62
+								},
+								__self: this
+							},
 							this.props.standings.map(function (item, idx) {
 								return React.createElement(
 									'tr',
-									{ key: item.player },
+									{ key: item.player, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 64
+										},
+										__self: _this5
+									},
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 65
+											},
+											__self: _this5
+										},
 										idx + 1
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 66
+											},
+											__self: _this5
+										},
 										React.createElement(
 											Link,
-											{ to: window.location.pathname + 'player/' + item.id.toString() + '/' },
+											{ to: window.location.pathname + 'player/' + item.id.toString() + '/', __source: {
+													fileName: _jsxFileName,
+													lineNumber: 66
+												},
+												__self: _this5
+											},
 											item.player
 										),
 										' '
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 67
+											},
+											__self: _this5
+										},
 										item.wins
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 68
+											},
+											__self: _this5
+										},
 										item.games - item.wins
 									),
 									React.createElement(
 										'td',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 69
+											},
+											__self: _this5
+										},
 										item.spread
 									)
 								);

@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('', views.home),
     path('start/', views.start),
+    path('import/', views.import_tsh),
     path('start/<slug:slug>/', views.start),
 ]

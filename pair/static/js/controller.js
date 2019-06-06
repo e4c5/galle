@@ -1,6 +1,6 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _jsxFileName = 'pair/static/jsx/controller.jsx';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -30,33 +30,75 @@ var Draw = function (_React$Component) {
 	_createClass(Draw, [{
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
 			console.log(this.props);
 			return React.createElement(
 				'div',
-				null,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 17
+					},
+					__self: this
+				},
 				React.createElement(
 					'table',
-					{ className: 'table' },
+					{ className: 'table', __source: {
+							fileName: _jsxFileName,
+							lineNumber: 18
+						},
+						__self: this
+					},
 					React.createElement(
 						'tbody',
-						null,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 18
+							},
+							__self: this
+						},
 						this.props.pending.map(function (item) {
 							return React.createElement(
 								'tr',
-								{ key: item.id },
+								{ key: item.id, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 20
+									},
+									__self: _this2
+								},
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 20
+										},
+										__self: _this2
+									},
 									item.participant
 								),
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 20
+										},
+										__self: _this2
+									},
 									item.first
 								),
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 20
+										},
+										__self: _this2
+									},
 									item.opponent
 								)
 							);
@@ -64,20 +106,43 @@ var Draw = function (_React$Component) {
 						this.props.completed.map(function (item) {
 							return React.createElement(
 								'tr',
-								{ className: 'table-secondary', key: item.id },
+								{ className: 'table-secondary', key: item.id, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 23
+									},
+									__self: _this2
+								},
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 23
+										},
+										__self: _this2
+									},
 									item.participant
 								),
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 23
+										},
+										__self: _this2
+									},
 									item.first
 								),
 								React.createElement(
 									'td',
-									null,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 23
+										},
+										__self: _this2
+									},
 									item.opponent
 								)
 							);
@@ -104,13 +169,13 @@ var Controller = function (_React$Component2) {
 	function Controller(props) {
 		_classCallCheck(this, Controller);
 
-		var _this2 = _possibleConstructorReturn(this, (Controller.__proto__ || Object.getPrototypeOf(Controller)).call(this, props));
+		var _this3 = _possibleConstructorReturn(this, (Controller.__proto__ || Object.getPrototypeOf(Controller)).call(this, props));
 
-		_this2.state = { 'standings': [], 'pending': [], 'completed': [],
+		_this3.state = { 'standings': [], 'pending': [], 'completed': [],
 			tournament: {}, errors: '', round: 0 };
 
-		_this2.submitResult = _this2.submitResult.bind(_this2);
-		return _this2;
+		_this3.submitResult = _this3.submitResult.bind(_this3);
+		return _this3;
 	}
 
 	/**
@@ -121,7 +186,7 @@ var Controller = function (_React$Component2) {
 	_createClass(Controller, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var url = '/api/standings/' + this.props.tournament_id + '/';
 			axios.get(url).then(function (response) {
@@ -139,15 +204,15 @@ var Controller = function (_React$Component2) {
 					}
 					return b.wins - a.wins;
 				});
-				_this3.setState({ 'standings': standings });
+				_this4.setState({ 'standings': standings });
 			});
 
 			url = '/api/' + this.props.tournament_id + '/';
 			axios.get(url).then(function (response) {
-				_this3.setState({ 'tournament': response.data, 'round': response.data.current_round });
+				_this4.setState({ 'tournament': response.data, 'round': response.data.current_round });
 
 				/* on success we load the results */
-				var url = '/api/results/' + _this3.props.tournament_id + '/?round=' + response.data.current_round;
+				var url = '/api/results/' + _this4.props.tournament_id + '/?round=' + response.data.current_round;
 				axios.get(url).then(function (response) {
 					var completed = [];
 					var pending = [];
@@ -171,7 +236,7 @@ var Controller = function (_React$Component2) {
 						}
 					});
 
-					_this3.setState({ 'completed': completed, 'pending': pending });
+					_this4.setState({ 'completed': completed, 'pending': pending });
 				});
 			});
 		}
@@ -196,7 +261,7 @@ var Controller = function (_React$Component2) {
 	}, {
 		key: 'submitResult',
 		value: function submitResult(evt, current) {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.setState({ 'errors': '' });
 
@@ -211,15 +276,15 @@ var Controller = function (_React$Component2) {
 
 						record.score_for = response.data.score_for;
 						record.score_against = response.data.score_against;
-						var pending = _this4.state.pending.filter(function (item) {
+						var pending = _this5.state.pending.filter(function (item) {
 							return item.id != record.id;
 						});
-						var completed = _this4.state.completed.slice();
+						var completed = _this5.state.completed.slice();
 						completed.push(record);
 
-						_this4.setState({ completed: completed, pending: pending, matching: [] });
+						_this5.setState({ completed: completed, pending: pending, matching: [] });
 					}).catch(function (response) {
-						_this4.setState({ 'errors': 'Could not enter result for ' + current });
+						_this5.setState({ 'errors': 'Could not enter result for ' + current });
 					});
 				} catch (error) {
 					this.setState({ 'errors': 'Could not enter result for ' + current });
@@ -233,66 +298,159 @@ var Controller = function (_React$Component2) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this6 = this;
 
 			return React.createElement(
 				Router,
-				null,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 161
+					},
+					__self: this
+				},
 				React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 162
+						},
+						__self: this
+					},
 					React.createElement(
 						'nav',
-						{ className: 'navbar' },
+						{ className: 'navbar', __source: {
+								fileName: _jsxFileName,
+								lineNumber: 163
+							},
+							__self: this
+						},
 						React.createElement(
 							Link,
-							{ className: 'nav-link active', to: window.location.pathname },
+							{ className: 'nav-link active', to: window.location.pathname, __source: {
+									fileName: _jsxFileName,
+									lineNumber: 164
+								},
+								__self: this
+							},
 							'Standings'
 						),
 						React.createElement(
 							Link,
-							{ className: 'nav-link', to: window.location.pathname + 'pairing' },
+							{ className: 'nav-link', to: window.location.pathname + 'pairing', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 165
+								},
+								__self: this
+							},
 							'Data Entry'
 						),
 						React.createElement(
 							Link,
-							{ className: 'nav-link', to: window.location.pathname + 'draw' },
+							{ className: 'nav-link', to: window.location.pathname + 'draw', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 166
+								},
+								__self: this
+							},
 							'Draw'
 						),
 						React.createElement(
 							Link,
-							{ className: 'nav-link', to: window.location.pathname + 'settings' },
+							{ className: 'nav-link', to: window.location.pathname + 'settings', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 167
+								},
+								__self: this
+							},
 							'Settings'
 						)
 					),
 					React.createElement(
 						Switch,
-						null,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 169
+							},
+							__self: this
+						},
 						React.createElement(Route, { exact: true, path: window.location.pathname,
 							render: function render(props) {
-								return React.createElement(Standings, _extends({}, props, { standings: _this5.state.standings, round: _this5.state.round, tournament_id: _this5.props.tournament_id }));
-							}
+								return React.createElement(Standings, Object.assign({}, props, { standings: _this6.state.standings, round: _this6.state.round, tournament_id: _this6.props.tournament_id, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 172
+									},
+									__self: _this6
+								}));
+							},
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 171
+							},
+							__self: this
 						}),
 						React.createElement(Route, { path: window.location.pathname + 'pairing',
 							render: function render(props) {
-								return React.createElement(Pairing, { round: _this5.props.round, tournament_id: _this5.props.tournament_id,
-									completed: _this5.state.completed, pending: _this5.state.pending, submitResult: _this5.submitResult });
-							}
+								return React.createElement(Pairing, { round: _this6.props.round, tournament_id: _this6.props.tournament_id,
+									completed: _this6.state.completed, pending: _this6.state.pending, submitResult: _this6.submitResult, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 176
+									},
+									__self: _this6
+								});
+							},
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 174
+							},
+							__self: this
 						}),
 						React.createElement(Route, { path: window.location.pathname + "draw",
 							render: function render(props) {
-								return React.createElement(Draw, { completed: _this5.state.completed, pending: _this5.state.pending });
-							}
+								return React.createElement(Draw, { completed: _this6.state.completed, pending: _this6.state.pending, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 181
+									},
+									__self: _this6
+								});
+							},
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 179
+							},
+							__self: this
 						}),
 						React.createElement(Route, { path: window.location.pathname + "settings",
 							render: function render(props) {
-								return React.createElement(Settings, { tournament: _this5.state.tournament });
-							}
+								return React.createElement(Settings, { tournament: _this6.state.tournament, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 185
+									},
+									__self: _this6
+								});
+							},
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 183
+							},
+							__self: this
 						}),
 						React.createElement(Route, { path: window.location.pathname + "player/:id/",
 							render: function render(props) {
-								return React.createElement(PlayerStanding, _extends({}, props, { tournament_id: _this5.props.tournament_id }));
-							}
+								return React.createElement(PlayerStanding, Object.assign({}, props, { tournament_id: _this6.props.tournament_id, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 188
+									},
+									__self: _this6
+								}));
+							},
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 187
+							},
+							__self: this
 						})
 					)
 				)
@@ -304,4 +462,9 @@ var Controller = function (_React$Component2) {
 }(React.Component);
 
 var elem = document.getElementById('root-settings');
-ReactDOM.render(React.createElement(Controller, { tournament_id: elem.dataset.tournament }), elem);
+ReactDOM.render(React.createElement(Controller, { tournament_id: elem.dataset.tournament, __source: {
+		fileName: _jsxFileName,
+		lineNumber: 203
+	},
+	__self: undefined
+}), elem);

@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from pair import serializers
 from pair import forms
 from pair.models import TournamentRound, RoundResult, Participant, Tournament, Player
-
+from tools import tsh_to_json
 
 class TournamentViewSet(viewsets.ModelViewSet):
     '''
@@ -88,6 +88,21 @@ def start(request, slug=None):
     else:
         return render(request, 'start.html')
 
+def import_tsh(request):
+    if request.method == 'POST':
+        form = forms.UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            config = request.FILES['config_file'].read().decode('utf-8')
+            data = request.FILES['at_file'].read().decode('utf-8')
+            tourney, created = tsh_to_json.process_config_tsh(config)
+            if created:
+                redirect('/')
+                
+    else:
+        form = forms.UploadForm()
+    return render(request, 'import.html', {'form': form})
+
+        
 def tournament(request, slug):
     tournament = Tournament.objects.get(slug=slug);
     return render(request, "tournament.html", {'tournament': tournament});

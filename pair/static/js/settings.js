@@ -1,5 +1,7 @@
 'use strict';
 
+var _jsxFileName = 'pair/static/jsx/settings.jsx';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -86,79 +88,180 @@ var Settings = function (_React$Component) {
 			if (this.state.tournament.rounds) {
 				var button = null;
 				if (this.state.tournament.rounds.length == 0 || this.state.tournament.name == '') {
-					button = React.createElement('input', { type: 'submit', className: 'btn btn-primary', value: 'Submit', disabled: true });
+					button = React.createElement('input', { type: 'submit', className: 'btn btn-primary', value: 'Submit', disabled: true, __source: {
+							fileName: _jsxFileName,
+							lineNumber: 63
+						},
+						__self: this
+					});
 				} else {
-					button = React.createElement('input', { type: 'submit', className: 'btn btn-primary', value: 'Submit' });
+					button = React.createElement('input', { type: 'submit', className: 'btn btn-primary', value: 'Submit', __source: {
+							fileName: _jsxFileName,
+							lineNumber: 66
+						},
+						__self: this
+					});
 				}
 				return React.createElement(
 					'div',
-					null,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 68
+						},
+						__self: this
+					},
 					this.state.errors && React.createElement(
 						'div',
-						{ className: 'alert alert-error' },
+						{ className: 'alert alert-error', __source: {
+								fileName: _jsxFileName,
+								lineNumber: 69
+							},
+							__self: this
+						},
 						this.state.errors
 					),
 					React.createElement(
 						'form',
 						{ className: 'form', onSubmit: function onSubmit(evt) {
 								return _this2.submitForm(evt);
-							} },
+							}, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 70
+							},
+							__self: this
+						},
 						React.createElement(
 							'div',
-							{ className: 'row align-items-center' },
+							{ className: 'row align-items-center', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 71
+								},
+								__self: this
+							},
 							React.createElement(
 								'div',
-								{ className: 'col-8' },
+								{ className: 'col-8', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 72
+									},
+									__self: this
+								},
 								React.createElement('input', { type: 'text', placeholder: 'Tournament name',
 									value: this.state.tournament.name, onChange: function onChange(evt) {
 										return _this2.titleChange(evt);
-									}, className: 'form-control' })
+									}, className: 'form-control', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 73
+									},
+									__self: this
+								})
 							),
 							React.createElement(
 								'div',
-								{ className: 'col-1' },
+								{ className: 'col-1', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 75
+									},
+									__self: this
+								},
 								'Date'
 							),
 							React.createElement(
 								'div',
-								{ className: 'col-2' },
+								{ className: 'col-2', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 76
+									},
+									__self: this
+								},
 								React.createElement('input', { type: 'date', onChange: function onChange(evt) {
 										return _this2.dateChange(evt);
-									}, className: 'form-control' })
+									}, className: 'form-control', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 76
+									},
+									__self: this
+								})
 							)
 						),
 						React.createElement(
 							'div',
-							{ className: 'row align-items-center' },
+							{ className: 'row align-items-center', __source: {
+									fileName: _jsxFileName,
+									lineNumber: 79
+								},
+								__self: this
+							},
 							React.createElement(
 								'div',
-								{ className: 'col-2' },
+								{ className: 'col-2', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 81
+									},
+									__self: this
+								},
 								'Number of rounds'
 							),
 							React.createElement(
 								'div',
-								{ className: 'col-2' },
+								{ className: 'col-2', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 82
+									},
+									__self: this
+								},
 								React.createElement('input', { type: 'number', onChange: function onChange(evt) {
 										return _this2.roundsChange(evt);
-									}, className: 'form-control' })
+									}, className: 'form-control', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 82
+									},
+									__self: this
+								})
 							),
 							React.createElement(
 								'div',
-								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
+								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons', __source: {
+										fileName: _jsxFileName,
+										lineNumber: 83
+									},
+									__self: this
+								},
 								React.createElement(
 									'label',
-									{ className: 'btn btn-secondary active' },
+									{ className: 'btn btn-secondary active', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 84
+										},
+										__self: this
+									},
 									React.createElement('input', { type: 'radio', onChange: function onChange(evt) {
 											return _this2.ratedChanged(evt);
-										}, name: 'rated', checked: true }),
+										}, name: 'rated', checked: true, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 85
+										},
+										__self: this
+									}),
 									' Rated'
 								),
 								React.createElement(
 									'label',
-									{ className: 'btn btn-secondary' },
+									{ className: 'btn btn-secondary', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 87
+										},
+										__self: this
+									},
 									React.createElement('input', { type: 'radio', onChange: function onChange(evt) {
 											return _this2.ratedChanged(evt);
-										}, name: 'rated' }),
+										}, name: 'rated', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 88
+										},
+										__self: this
+									}),
 									' Unrated'
 								)
 							)
@@ -166,75 +269,156 @@ var Settings = function (_React$Component) {
 						this.state.tournament.rounds.map(function (item, idx) {
 							return React.createElement(
 								'div',
-								{ className: 'row align-items-center', key: item.round_no },
+								{ className: 'row align-items-center', key: item.round_no, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 93
+									},
+									__self: _this2
+								},
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 94
+										},
+										__self: _this2
+									},
 									React.createElement(
 										'p',
-										null,
+										{
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 94
+											},
+											__self: _this2
+										},
 										'Round ',
 										item.round_no
 									)
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 95
+										},
+										__self: _this2
+									},
 									'Based on'
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 96
+										},
+										__self: _this2
+									},
 									React.createElement('input', { type: 'integer', value: item.based_on, onChange: function onChange(evt) {
 											return _this2.handleChange(evt, idx);
-										}, name: 'based_on', className: 'form-control' })
+										}, name: 'based_on', className: 'form-control', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 97
+										},
+										__self: _this2
+									})
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 98
+										},
+										__self: _this2
+									},
 									'Pairing System'
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 99
+										},
+										__self: _this2
+									},
 									React.createElement(
 										'select',
 										{ className: 'form-control', name: 'pairing_system', onChange: function onChange(evt) {
 												return _this2.handleChange(evt, idx);
-											} },
+											}, __source: {
+												fileName: _jsxFileName,
+												lineNumber: 100
+											},
+											__self: _this2
+										},
 										React.createElement(
 											'option',
-											{ value: 'SWISS' },
+											{ value: 'SWISS', __source: {
+													fileName: _jsxFileName,
+													lineNumber: 101
+												},
+												__self: _this2
+											},
 											'Swiss'
 										),
 										React.createElement(
 											'option',
-											{ value: 'ROUND_ROBIN' },
+											{ value: 'ROUND_ROBIN', __source: {
+													fileName: _jsxFileName,
+													lineNumber: 102
+												},
+												__self: _this2
+											},
 											'Round Robin'
 										),
 										React.createElement(
 											'option',
-											{ value: 'KOTH' },
+											{ value: 'KOTH', __source: {
+													fileName: _jsxFileName,
+													lineNumber: 103
+												},
+												__self: _this2
+											},
 											'King of the hill'
 										),
 										React.createElement(
 											'option',
-											{ value: 'Random' },
+											{ value: 'Random', __source: {
+													fileName: _jsxFileName,
+													lineNumber: 104
+												},
+												__self: _this2
+											},
 											'Random'
 										)
 									)
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 107
+										},
+										__self: _this2
+									},
 									'Spread Cap'
 								),
 								React.createElement(
 									'div',
-									{ className: 'col' },
+									{ className: 'col', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 108
+										},
+										__self: _this2
+									},
 									React.createElement('input', { type: 'integer', value: item.spread_cap, onChange: function onChange(evt) {
 											return _this2.handleChange(evt, idx);
-										}, className: 'form-control' })
+										}, className: 'form-control', __source: {
+											fileName: _jsxFileName,
+											lineNumber: 109
+										},
+										__self: _this2
+									})
 								)
 							);
 						}),
