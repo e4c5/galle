@@ -1,0 +1,46 @@
+division a a.t
+
+config event_name = "Round Robin Tournament"
+
+config event_date = "May 25, 2019"
+
+
+config colour = 'no'
+config assign_firsts = 1 
+config final_draw = 1
+config check_by_winner = 1
+config bye_firsts = 'ignore'
+config bye_spread = 1
+config pairing_system = 'auto'
+
+config entry_pairing = 1
+autopair a 14 15 koth 4 15 a
+autopair a 15 16 koth 4 16 a
+
+config rating_system = 'aus'
+config max_rounds = 20
+config no_index_tally_slips = 1
+config no_text_files = 1
+config no_boards = 1
+config gibson = 1
+config gibson = 'strict'
+
+prize rank 1 a 25pts 
+prize rank 2 a 20pts 	
+prize rank 3 a 17pts 	
+prize rank 4 a 14pts  	
+prize rank 5 a 12pts 	
+prize rank 6 a 10pts 	
+prize rank 7 a 8pts  	
+prize rank 8 a 6pts 	
+prize separator 
+config ftp_path = 'public_html/tsh'
+config html_index_recent_first = 1
+
+
+
+
+
+
+
+
