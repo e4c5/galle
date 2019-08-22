@@ -1,6 +1,11 @@
 import re
 import time
+import json
 
+from django.db import transaction
+
+from pair.models import Tournament
+    
 def tsh_to_json(path):
     '''
     Generated a JSON from a tournament data file
@@ -104,7 +109,7 @@ def process_config_tsh(data):
     '''
     Import a tsh confirguration
     '''
-    from pair.models import Tournament
+
     name = ''
     for line in data.split("\n") :
         parts = line.split('=')
@@ -140,3 +145,146 @@ def process_config_tsh(data):
 
     return tourney, created
 
+
+
+def import_tournament(players, tourney):
+    spread_cap = False
+
+    if tourney.spread_cap :
+        spread_cap = json.loads(tourney.spread_cap)
+
+
+    players[0]['scores'] = [0] * len(players[1]['scores'])
+    
+    for idx, values in enumerate(players):
+        participant = Participant.get_by_player(values['name'],tourney)
+        print(participant, participant.id, tourney.id)
+        if values['name'] != 'bye':
+            participant.old_rating = values['old_rating']
+            if values['rank']:
+                participant.position = values['rank'][-1]
+
+            if values['off']:
+                print('Offed: ', values['name'])
+                values['opponents'] = [b for b in values['opponents'] if int(b) > 0]
+                participant.offed = 1;
+                participant.games = len(values['opponents'])
+            else :
+                participant.games = len(values['opponents'])
+
+            if values['newr'] and tourney.rated:
+                participant.new_rating = int(values['newr'][-1])
+                if participant.new_rating < 500:
+                    participant.new_rating = 500
+                
+        values['participant'] = participant
+
+
+    saved = []
+
+    
+    with transaction.atomic():
+        for player in players[1:] :
+            i = 0
+            wins = 0
+            spread = 0
+            participant = player['participant']
+    
+            standings = []
+    
+            for opposite in player['opponents'] :
+                try :
+                     
+                    opponent = players[int(opposite)]
+    
+                    player_score = player['scores'][i]
+    
+                    opponent_score = opponent['scores'][i]
+                    p12 = player['p12'][i]
+    
+                    if opponent['name'] == 'bye' :
+                        margin = int(player['scores'][i])
+                    else :
+                        margin = int(player['scores'][i]) - int(opponent['scores'][i])
+        
+                    if margin > 0 :
+                        wins += 1
+                    if margin == 0 :
+                        wins += 0.5
+                    if spread_cap and i < len(spread_cap):
+                        max_margin = int(spread_cap[i])
+                        if max_margin < margin :
+                            margin = max_margin
+                            #print 'adjusted spread cap round ',i
+    
+                        if margin < 0 and margin < (max_margin * -1)  :
+                            #print 'adjusted spread cap for negative round ',i, margin, max_margin
+                            margin = -max_margin
+    
+                    spread += margin
+                    if p12 == '3':
+                        # to be decided by drawing a tile and probably
+                        # not entered in the records.
+                        if opponent['name'] != 'bye':
+                            if opponent['p12'][i] == '3':
+                                # let us arbitarily assign the current player as starting.
+                                opponent['p12'][i] = '2'
+                                player['p12'][i] = '1'
+                                start_first = True
+                            else:
+                                if opponent['p12'][i] == '2':
+                                    # we have already arbitarily decided that the other player
+                                    # would be flagged as going second.
+                                    player['p12'][i] = '1'
+                                    start_first = True
+                                else :
+                                    player['p12'][i] = '2'
+                                    start_first = False
+                        else :
+                            # this is a by. We will arbitiarly set the current user as starting
+                            start_first = True
+                    else :
+                        if p12 == '1':
+                            start_first = True
+                        else:
+                            start_first = False
+    
+                    if player['rank']:
+                        if player['off']:
+                            rank = None
+                        else :
+                            rank = player['rank'][i]
+    
+                    else:
+                        rank = None
+                                        
+                    st = {'score_against': opponent_score, 'score_for': player_score,
+                            'participant': participant,'opponent': opponent['participant'],
+                            'tournament': tourney,
+                            'wins': wins , 'game': i+1 , 'first': start_first,
+                            'spread': spread, 'position':  rank }
+    
+                    standing = Standing(**st)
+                    standings.append(standing)
+                    
+                except Exception as e:
+                    print("no result for ", player['name'], 'round', i, tourney.name)
+
+                    player_score = None
+                    opponent_score = None
+                    margin = None
+                    start_first = False
+                
+                i += 1
+    
+            if standings:
+                print('saved')
+                Standing.objects.bulk_create(standings)
+                st = standings[-1]
+                participant.spread = st.spread
+                participant.wins = st.wins
+                participant.save()
+            
+    t2 = time.time()
+    print("Second part ", t2 - t1)
+    

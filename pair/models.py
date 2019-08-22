@@ -230,15 +230,9 @@ class Participant(models.Model):
 
     @classmethod
     def get_by_player(self, player_name, tournament):
-        pt = slugify(tournament.name) + slugify(player_name)
-        p = cache.get('PTCT_{0}'.format(pt))  # @UndefinedVariable
-        if p :
-            return p
-        
         player, created = Player.get_by_name(player_name)
         participant, created = Participant.objects.get_or_create(tournament=tournament, player=player)
         
-        cache.set('PTCT_{0}'.format(pt), participant) 
         return participant
         
     def __str__(self):
