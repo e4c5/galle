@@ -4,7 +4,7 @@ import json
 
 from django.db import transaction
 
-from pair.models import Tournament
+from pair.models import Tournament, Participant, Standing
     
 def tsh_to_json(path):
     '''
