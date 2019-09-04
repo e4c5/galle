@@ -16,18 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from rest_framework.routers import DefaultRouter
 from pair import views
-router = DefaultRouter()
-router.register(r'results/(?P<tournament>\d+)', views.ResultViewSet, base_name='tournament')
-router.register(r'standings/(?P<tournament>\d+)', views.StandingsViewSet, base_name='tournament')
-router.register(r'', views.TournamentViewSet, base_name='tournament')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tournament/<slug:slug>/', views.tournament),
-    path('api/', include(router.urls)),
+    path('api/', include('api.urls')),
     path('', views.home),
     path('start/', views.start),
     path('import/', views.import_tsh),
