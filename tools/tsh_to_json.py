@@ -4,7 +4,7 @@ import json
 
 from django.db import transaction
 
-from pair.models import Tournament, Participant, Standing
+from pair.models import Tournament, Participant, RoundResult, TournamentRound
     
 def tsh_to_json(path):
     '''
@@ -85,7 +85,7 @@ def json_to_tsh(data):
     Reverse of tsh_to_json
     '''
     output = []
-    
+    print(data)
     for record in data:
         if record['name'] != 'bye':
             row = "{0} {1} {2}; {3}; ".format(record['name'], 
@@ -109,39 +109,64 @@ def process_config_tsh(data):
     '''
     Import a tsh confirguration
     '''
-
+    tourney = None
+    created = None
+    spread_cap = {}
     name = ''
     for line in data.split("\n") :
         parts = line.split('=')
         cname = parts[0].strip()
-        if len(parts)  == 2 and cname == "config event_name" :
-            name = re.sub("""['"]""", '', parts[1].strip())
-        if len(parts)  == 2 and cname == "config event_date" :
-            start_date = re.sub("""['"]""", '', parts[1].strip())
-            start_date = re.sub(' ?(and|&|-) ?[0-9]{1,2},','',start_date)
-            start_date = re.sub(',','', start_date)
+        
+        if len(parts)  == 2:
+            if cname == "config event_name" :
+                name = re.sub("""['"]""", '', parts[1].strip())
 
-            try:
-                dt = time.strptime(start_date,'%B %d %Y')
-                start_date = time.strftime('%Y-%m-%d', dt)
-            except ValueError:
+            if cname == "config event_date" :
+                start_date = re.sub("""['"]""", '', parts[1].strip())
+                start_date = re.sub(' ?(and|&|-) ?[0-9]{1,2},','',start_date)
+                start_date = re.sub(',','', start_date)
+    
                 try:
-                    dt = time.strptime(start_date,'%b %d %Y')
+                    dt = time.strptime(start_date,'%B %d %Y')
                     start_date = time.strftime('%Y-%m-%d', dt)
                 except ValueError:
-                    q = start_date.split(' ')
-                    start_date = "{0} {1} {2}".format(q[0], q[1], q[-1])
-                    dt = time.strptime(start_date, '%B %d %Y')
-                    start_date = time.strftime('%Y-%m-%d', dt)
+                    try:
+                        dt = time.strptime(start_date,'%b %d %Y')
+                        start_date = time.strftime('%Y-%m-%d', dt)
+                    except ValueError:
+                        q = start_date.split(' ')
+                        start_date = "{0} {1} {2}".format(q[0], q[1], q[-1])
+                        dt = time.strptime(start_date, '%B %d %Y')
+                        start_date = time.strftime('%Y-%m-%d', dt)
                 
-        if len(parts) == 2 and cname == 'config spread_cap':
-            spread_cap = parts[1].strip() 
+            if cname == 'config spread_cap':
+                caps = parts[1].strip()[1:-2].split(",")
+                spread_cap = { i + 1 : cap for i, cap in enumerate(caps) }  
 
-    slug=Tournament.tournament_slug(name)
-    tourney, created = Tournament.objects.get_or_create(slug=slug, 
-                                                defaults={'start_date' : start_date, 
-                                                          'rated': True, 'name': name,
-                                                          'slug': slug } )
+        else:
+            if line.startswith('autopair'):
+                if tourney == None:
+                    slug=Tournament.tournament_slug(name)
+                    tourney, created = Tournament.objects.get_or_create(slug=slug, 
+                                                    defaults={'start_date' : start_date, 
+                                                              'rated': True, 'name': name,
+                                                              'slug': slug } )
+
+                parts = line.split(' ')
+                # example autopair a 0 1 ns 0 0
+                if created:
+                    ps = TournamentRound.MANUAL
+                    if parts[4] == 'ns':
+                        ps = TournamentRound.SWISS
+                    if parts[4] == 'koth':
+                        ps = TournamentRound.KOTH
+                        
+                    TournamentRound.objects.create(tournament=tourney, round_no=parts[3],
+                                                   spread_cap=spread_cap.get(int(parts[3]), None),
+                                                   pairing_system=ps, repeats=parts[5],
+                                                   based_on=parts[6]
+                                                   )
+    
 
     return tourney, created
 
@@ -149,10 +174,6 @@ def process_config_tsh(data):
 
 def import_tournament(players, tourney):
     spread_cap = False
-
-    if tourney.spread_cap :
-        spread_cap = json.loads(tourney.spread_cap)
-
 
     players[0]['scores'] = [0] * len(players[1]['scores'])
     
@@ -261,10 +282,11 @@ def import_tournament(players, tourney):
                     st = {'score_against': opponent_score, 'score_for': player_score,
                             'participant': participant,'opponent': opponent['participant'],
                             'tournament': tourney,
-                            'wins': wins , 'game': i+1 , 'first': start_first,
+                            'wins': wins , 'game': tourney.rounds.get(round_no=i+1),
+                            'first': start_first,
                             'spread': spread, 'position':  rank }
     
-                    standing = Standing(**st)
+                    standing = RoundResult(**st)
                     standings.append(standing)
                     
                 except Exception as e:
@@ -279,12 +301,11 @@ def import_tournament(players, tourney):
     
             if standings:
                 print('saved')
-                Standing.objects.bulk_create(standings)
+                RoundResult.objects.bulk_create(standings)
                 st = standings[-1]
                 participant.spread = st.spread
                 participant.wins = st.wins
                 participant.save()
             
     t2 = time.time()
-    print("Second part ", t2 - t1)
     

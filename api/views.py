@@ -17,6 +17,7 @@ class TournamentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Tournament.objects.prefetch_related('rounds').all()
         
+        
 class ResultViewSet(viewsets.ModelViewSet):
     '''
     Handles displaying and updating results of a tournament
@@ -42,6 +43,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         pk = kwargs.get('pk')
         resp = super().update(request, *args, **kwargs)
         return resp
+    
     
 class StandingsViewSet(viewsets.ModelViewSet):
     '''

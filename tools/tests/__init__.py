@@ -22,5 +22,3 @@ class TestTools(TestCase):
             tourney, created = tsh_to_json.process_config_tsh(data)
             self.assertFalse(created)
             self.assertEquals(1, Tournament.objects.count())
-            
-    def test_crea

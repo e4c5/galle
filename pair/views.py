@@ -43,8 +43,8 @@ def import_tsh(request):
             data = request.FILES['at_file'].read().decode('utf-8')
             tourney, created = tsh_to_json.process_config_tsh(config)
             if created:
-                games = tsh_to_json.tsh_to_json_data(data)
-                
+                games = tsh_to_json.tsh_to_json_data(data.split("\n"))
+                tsh_to_json.import_tournament(games, tourney)
                 redirect('/')
             else :
                 message = 'A tournament by that name already exists'    
