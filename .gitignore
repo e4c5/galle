@@ -1,3 +1,8 @@
 db.sqlite3
 node_modules
 *pyc
+pair/static/js/controller.js
+pair/static/js/pairing.js
+pair/static/js/settings.js
+pair/static/js/standings.js
+pair/static/js/start.js
