@@ -6,6 +6,12 @@ const Switch = window.ReactRouterDOM.Switch;
 const Redirect = window.ReactRouterDOM.Redirect;
  
 
+class Rounds extends React.Component {
+	render() {
+		return "Rounds baby rounds"
+	}
+}
+
 class Draw extends React.Component {
 	constructor(props){ 
 		console.log(props);
@@ -160,14 +166,15 @@ class Main extends React.Component {
     	  <div>
 		    	 <nav className='navbar'>
 		           <Link className="nav-link active" to={this.context.basePath}>Standings</Link>
-		           <Link className="nav-link" to={this.context.basePath + 'pairing'}>Data Entry</Link>
+		           <Link className="nav-link" to={this.context.basePath + 'scoring'}>Scoring</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'draw'}>Draw</Link>
+		           <Link className="nav-link" to={this.context.basePath + 'rounds'}>Rounds</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'settings'}>Settings</Link>
 		        </nav>
 		        <Switch>
       
 			    	<Route exact path={this.context.basePath }
-			       	 render={(props) => <Standings {...props} standings={this.state.standings}  /> }
+			       	    render={(props) => <Standings {...props} standings={this.state.standings}  /> }
 					 />
 			        <Route path={this.context.basePath + 'pairing'}
 			        	 render={(props) => 
@@ -181,7 +188,8 @@ class Main extends React.Component {
 			         <Route path={this.context.basePath + "settings"}
 							 render={props => 
 						       <Settings />}
-					 />      
+					 />" +
+					 <Route path={this.context.basePath + "rounds"} component={Rounds} />
 					 <Route path={ this.context.basePath + "player/:id/"}
 										render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
 								     />

@@ -10,44 +10,60 @@ class PlayerStanding extends React.Component {
 	static contextType = TournamentContext
 	
 	constructor(props) {
-		console.log("Reconstruct")
 		super(props);
-		this.state = {loaded: false};
+		this.state = {loaded: false, participant_id: null};
 	}
 	
 	load(participant_id) {
 		axios.get(`/api/${this.props.tournament_id}/results/?participant=${participant_id}`).then(response => {
-			this.setState({'results': response.data, 'loaded': true});
+			this.setState({'results': response.data, 'loaded': true, 
+				'participant_id': participant_id});
 		});
 	}
 	
-	switchPlayer(e, participant_id) {
-		e.preventDefault();
-		this.load(participant_id)
+	componentDidUpdate(prevProps) {
+		/*
+		 * Using both component did upadate and component did mount in this
+		 * manner is crucial to making to UI updat when the use clicks a link
+		 * to another player with in a player standing page
+		 */
+		if(prevProps !== undefined && prevProps.match.params.id != this.props.match.params.id) {
+			this.load(this.props.match.params.id)
+		}
 	}
+	
 	componentDidMount() {
 		this.load(this.props.match.params.id)
 	}
 
+	editRow(e, idx) {
+		console.log(idx);
+	}
+	
 	render() {
 		if(this.state.loaded) {
 			return(<div><h1>{this.state.current_player}</h1>
 				<table className='table table-bordered'>  
-				  <thead className='thead-light'><tr><th>Round</th><th>Opponent</th><th>Score</th><th>Opponent Score</th><th>Spread</th></tr></thead>
-					<tbody>
-					  {this.state.results.map(item=>(
-						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}>
+				  <thead className='thead-light'>
+				     <tr><th>Round</th><th>Opponent</th><th>Score</th><th>Opponent Score</th><th>Spread</th></tr>
+				  </thead>
+				  <tbody>
+					  {this.state.results.map( (item, idx) =>(
+						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}
+						     onClick={ e=> this.editRow(e, idx)}
+						  >
 						     <td>{item.round_no}</td>
-						     <td><a onClick={ e => this.switchPlayer(e, item.opponent_id) }>{item.opponent}</a></td>
+						     <td>{ item.opponent != "Bye" ? <Link to={"../" + item.opponent_id + "/"}>{item.opponent}</Link>
+						                                  : item.opponent }
+						     </td>
 						     <td>{item.score_for}</td><td>{item.score_against}</td>
 						     <td>{item.spread}</td>
 						  </tr>)
 					)}
-					</tbody>
+				  </tbody>
 				</table></div>)
 		}
 		return (<div>Loading....</div>)
-		
 	}
 }
 /**

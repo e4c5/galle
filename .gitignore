@@ -71,4 +71,6 @@ var TournamentProvider = function (_React$Component) {
 	}]);
 
 	return TournamentProvider;
-}(React.Component);
+}(React.Component);pair/static/js/context.js
+pair/static/js/main.js
+pair/static/js/context.js

@@ -17,11 +17,19 @@ class TournamentProvider extends React.Component {
 		})
 		this.setState({participants: saved})
 	}
+	
+	getParticipant = (participant_id) => {
+		if(this.state.participants != null) {
+			return this.state.participants[participant_id]
+		}
+	}
+	
 	state = {
        tournament: null,       
        participants: null,
        basePath: null,
        setTournament: this.setTournament,
+       setParticipants: this.setParticipants,
        setBasePath: this.setBasePath
     };
 

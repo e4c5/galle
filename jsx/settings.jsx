@@ -1,7 +1,9 @@
 class Settings extends React.Component {
+	static contextType = TournamentContext
 	constructor(props) {
 		super(props);
 		this.state = {'tournament': this.context.tournament, 'errors': ''}
+		console.log(this.context)
 	}
 	
 	handleChange(evt, idx) {
@@ -14,6 +16,10 @@ class Settings extends React.Component {
 		let tournament = Object.assign({}, this.state.tournament)
 		tournament.name = evt.target.value;
 		this.setState({tournament: tournament});
+	}
+	
+	componentDidMount() {
+		console.log(this.context)
 	}
 	
 	/**
@@ -57,7 +63,7 @@ class Settings extends React.Component {
 	}
 	
 	render() {
-		if(this.state.tournament.rounds) {
+		if(this.state.tournament !== undefined && this.state.tournament.rounds) {
 			let button = null;
 			if(this.state.tournament.rounds.length == 0 || this.state.tournament.name == '') {
 				button = <input type='submit' className='btn btn-primary' value='Submit' disabled/>
