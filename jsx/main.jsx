@@ -32,13 +32,13 @@ class Draw extends React.Component {
  * The main component
  */
 class Main extends React.Component {
-	/**
-	 * The constructor
-	 */
+	static contextType = TournamentContext
+	
     constructor(props) {
     	super(props);
-    	this.state = {'standings': [], 'pending': [], 'completed': [],  
-    			tournament: {}, errors: '', round: 0}
+    	this.state = {'standings': [], 'pending': [], 'completed': [],
+    			errors: '', round: 0}
+    	
     	
     	this.submitResult = this.submitResult.bind(this);
     }
@@ -47,13 +47,15 @@ class Main extends React.Component {
 	 * Fetch the data when the component has mounted
 	 */
 	componentDidMount() {
-		let url = `/api/standings/${this.props.tournament_id}/`;
+		
+		if(this.context.basePath === null) {
+			this.context.setBasePath(window.location.pathname)
+		}
+		
+		let url = `/api/${this.props.tournament_id}/participant`;
 		axios.get(url).then(
 			response => {
-				const standings = [];
-				response.data.map(item => {
-					standings.push(item);
-				});
+				const standings = response.data;
 
 				standings.sort(function(a,b){
 					if(a.wins == b.wins) {
@@ -65,13 +67,14 @@ class Main extends React.Component {
 					return b.wins - a.wins;
 				});
 				this.setState({'standings': standings});
+				this.context.setParticipants(standings);
 			}
 		);
 		
 		url = `/api/${this.props.tournament_id}/`;
 		axios.get(url).then(
 			response => {
-				this.setState({'tournament': response.data, 'round': response.data.current_round});
+				this.context.setTournament(response.data);
 
 				/* on success we load the results */
 				let url = `/api/results/${this.props.tournament_id}/?round=${response.data.current_round}`;
@@ -108,10 +111,7 @@ class Main extends React.Component {
 	findMatches(c) {
 		return this.state.pending.filter(item => c.length > 1 && item.participant.toLowerCase().search(c) != -1).slice(0, 4);
 	}	
-	
-	updateTournament(evt, tournament) {
-		axios('/api/tournament/')
-	}
+
 	/**
 	 * Handle submission of results
 	 * 
@@ -156,35 +156,33 @@ class Main extends React.Component {
 	
 	
     render() {
-
-    
     	return(<Router>
     	  <div>
 		    	 <nav className='navbar'>
-		           <Link className="nav-link active" to={window.location.pathname}>Standings</Link>
-		           <Link className="nav-link" to={window.location.pathname + 'pairing'}>Data Entry</Link>
-		           <Link className="nav-link" to={window.location.pathname + 'draw'}>Draw</Link>
-		           <Link className="nav-link" to={window.location.pathname + 'settings'}>Settings</Link>
+		           <Link className="nav-link active" to={this.context.basePath}>Standings</Link>
+		           <Link className="nav-link" to={this.context.basePath + 'pairing'}>Data Entry</Link>
+		           <Link className="nav-link" to={this.context.basePath + 'draw'}>Draw</Link>
+		           <Link className="nav-link" to={this.context.basePath + 'settings'}>Settings</Link>
 		        </nav>
 		        <Switch>
       
-			    	<Route exact path={window.location.pathname }
-			       	 render={(props) => <Standings {...props} standings={this.state.standings} round={this.state.round} tournament_id={this.props.tournament_id} /> }
+			    	<Route exact path={this.context.basePath }
+			       	 render={(props) => <Standings {...props} standings={this.state.standings}  /> }
 					 />
-			        <Route path={window.location.pathname + 'pairing'}
+			        <Route path={this.context.basePath + 'pairing'}
 			        	 render={(props) => 
 					  	   <Pairing round={this.props.round} tournament_id={this.props.tournament_id} 
 					  	       completed={this.state.completed} pending={this.state.pending} submitResult={this.submitResult}/>}
 					 />
-					 <Route path={window.location.pathname + "draw"}
+					 <Route path={this.context.basePath + "draw"}
 						 render={props => 
 					       <Draw completed={this.state.completed} pending={this.state.pending} />}
 					 />
-			         <Route path={window.location.pathname + "settings"}
+			         <Route path={this.context.basePath + "settings"}
 							 render={props => 
-						       <Settings tournament={this.state.tournament} />}
+						       <Settings />}
 					 />      
-					 <Route path={ window.location.pathname + "player/:id/"}
+					 <Route path={ this.context.basePath + "player/:id/"}
 										render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
 								     />
 			       </Switch>

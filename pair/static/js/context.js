@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var _jsxFileName = "jsx/context.js";
+var _jsxFileName = 'jsx/context.jsx';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -13,46 +13,54 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TournamentContext = React.createContext({});
 
 var TournamentProvider = function (_React$Component) {
-  _inherits(TournamentProvider, _React$Component);
+	_inherits(TournamentProvider, _React$Component);
 
-  function TournamentProvider() {
-    var _ref;
+	function TournamentProvider() {
+		var _ref;
 
-    var _temp, _this, _ret;
+		var _temp, _this, _ret;
 
-    _classCallCheck(this, TournamentProvider);
+		_classCallCheck(this, TournamentProvider);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TournamentProvider.__proto__ || Object.getPrototypeOf(TournamentProvider)).call.apply(_ref, [this].concat(args))), _this), _this.setTournaments = function (tournaments) {
-      _this.setState({ tournaments: tournaments });
-    }, _this.state = {
-      tournaments: [],
-      setTournaments: _this.setTournaments
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-  /**
-   * saves the list of tournaments
-   */
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TournamentProvider.__proto__ || Object.getPrototypeOf(TournamentProvider)).call.apply(_ref, [this].concat(args))), _this), _this.setBasePath = function (path) {
+			_this.setState({ basePath: path });
+		}, _this.setTournament = function (tournament) {
+			_this.setState({ tournament: tournament });
+		}, _this.setParticipants = function (participants) {
+			var saved = {};
+			participants.map(function (item) {
+				saved[item.id] = item;
+				item['results'] = [];
+			});
+			_this.setState({ participants: saved });
+		}, _this.state = {
+			tournament: null,
+			participants: null,
+			basePath: null,
+			setTournament: _this.setTournament,
+			setBasePath: _this.setBasePath
+		}, _temp), _possibleConstructorReturn(_this, _ret);
+	}
 
+	_createClass(TournamentProvider, [{
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				TournamentContext.Provider,
+				{ value: this.state, __source: {
+						fileName: _jsxFileName,
+						lineNumber: 30
+					},
+					__self: this
+				},
+				this.props.children
+			);
+		}
+	}]);
 
-  _createClass(TournamentProvider, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        TournamentContext.Provider,
-        { value: this.state, __source: {
-            fileName: _jsxFileName,
-            lineNumber: 19
-          },
-          __self: this
-        },
-        this.props.children
-      );
-    }
-  }]);
-
-  return TournamentProvider;
+	return TournamentProvider;
 }(React.Component);

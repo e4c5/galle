@@ -1,7 +1,7 @@
 class Settings extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {'tournament': props.tournament, 'errors': ''}
+		this.state = {'tournament': this.context.tournament, 'errors': ''}
 	}
 	
 	handleChange(evt, idx) {

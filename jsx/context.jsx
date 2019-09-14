@@ -1,18 +1,29 @@
 const TournamentContext = React.createContext({})
 
 class TournamentProvider extends React.Component {
-	/**
-	 * saves the list of tournaments
-	 */
-	setTournaments = (tournaments) => {
-		this.setState({tournaments: tournaments});
+	setBasePath = (path) => {
+		this.setState({basePath: path})
 	}
 	
+	setTournament = (tournament) => {
+		this.setState({tournament: tournament});
+	}
+	
+	setParticipants = (participants) => {
+		const saved = {}
+		participants.map(item => {
+			saved[item.id] = item
+			item['results'] = []
+		})
+		this.setState({participants: saved})
+	}
 	state = {
-       tournaments: [],       
-       setTournaments: this.setTournaments
+       tournament: null,       
+       participants: null,
+       basePath: null,
+       setTournament: this.setTournament,
+       setBasePath: this.setBasePath
     };
-
 
     render() {
      return ( 
