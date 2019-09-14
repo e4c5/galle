@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+from django.db.models import Q
+
 from api import serializers
 from pair.models import TournamentRound, RoundResult, Participant, Tournament, Player
 
@@ -34,9 +36,9 @@ class ResultViewSet(viewsets.ModelViewSet):
         if rnd:
             return qs.filter(game__round_no=rnd)
         
-        player = self.request.query_params.get('player')
+        player = self.request.query_params.get('participant')
         if player:
-            return qs.filter(participant__player__id=player)
+            return qs.filter(participant__id=player)
         return qs
     
     def update(self, request, *args, **kwargs):
