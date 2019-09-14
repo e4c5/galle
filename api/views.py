@@ -47,11 +47,11 @@ class ResultViewSet(viewsets.ModelViewSet):
         return resp
     
     
-class StandingsViewSet(viewsets.ModelViewSet):
+class ParticipantViewSet(viewsets.ModelViewSet):
     '''
     Handles the standings of a given tournament
     '''
-    serializer_class = serializers.StandingSerializer
+    serializer_class = serializers.ParticipantSerializer
     
     def get_queryset(self):
         tournament = self.kwargs['tournament']

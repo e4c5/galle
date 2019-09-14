@@ -15,20 +15,27 @@ class ResultSerializer(serializers.ModelSerializer):
     '''
     participant = serializers.StringRelatedField()
     opponent = serializers.StringRelatedField()
-
+    opponent_id = serializers.IntegerField(source="opponent.id")
     
     class Meta:
         model = RoundResult
-        fields = ('id', 'participant','opponent', 'score_for','score_against', 
+        fields = ('id', 'participant','opponent', 'score_for','score_against', 'opponent_id',
                   'first', 'round_no','spread')
         
         
-class StandingSerializer(serializers.ModelSerializer):
+        
+class ParticipantSerializer(serializers.ModelSerializer):
+    '''
+    Used for listing of participants
+    For example used by TournamentDetailSerializer to add the list of players
+    who took part in the event.
+    '''
     player = serializers.StringRelatedField()
 
     class Meta:
         model = Participant
-        fields = ('id','player','games','wins','spread')
+        fields = ('id','player','games','wins','spread',
+                  'new_rating','old_rating','position','offed')
 
 
 class TournamentListSerializer(serializers.ModelSerializer):
@@ -47,7 +54,7 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
     rounds = RoundSerializer(many=True)
 
     def create(self, validated_data):
-        rounds = validated_data.pop('rounds')
+        rounds = validated_data.pop('rounds') 
         tournament = Tournament.objects.create(**validated_data)
         for rnd in rounds:
             rnd['tournament_id'] = tournament.pk
@@ -57,7 +64,8 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Tournament
-        fields = ('id','name', 'start_date', 'rated', 'num_rounds','current_round','rounds','slug')
+        fields = ('id','name', 'start_date', 'rated', 'num_rounds','current_round',
+                  'rounds','slug')
         
                 
 # update pair_roundresult set score_for = NULL , score_against=NULL where game_id=36

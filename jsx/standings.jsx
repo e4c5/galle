@@ -15,7 +15,7 @@ class PlayerStanding extends React.Component {
 	 */
 	componentDidMount() {
 		
-		axios.get(`/api/results/${this.props.tournament_id}/?player=${this.props.match.params.id}`).then(response => {
+		axios.get(`/api/results/${this.props.tournament_id}/?participant=${this.props.match.params.id}`).then(response => {
 			this.setState({'results': response.data, 'loaded': true});
 		});
 	}
@@ -29,7 +29,7 @@ class PlayerStanding extends React.Component {
 					<tbody>
 					  {this.state.results.map(item=>(
 						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}>
-						     <td>{item.round}</td><td>{item.opponent}</td>
+						     <td>{item.round_no}</td><td>{item.opponent}</td>
 						     <td>{item.score_for}</td><td>{item.score_against}</td>
 						     <td>{item.spread}</td>
 						  </tr>)
@@ -46,13 +46,13 @@ class PlayerStanding extends React.Component {
  */
 class Standings extends React.Component {
 	constructor(props) {
+		console.log("WTf")
         super(props);
         this.state = {current_player: '', results: []}
     }
 	
 	render() {
-		if(this.props.round) {
-	        return (
+		return (
 	         
 	          <div>
 	         
@@ -74,9 +74,7 @@ class Standings extends React.Component {
 	          </div>
 			     
 			 
-	        );
-		}
-		return null;
+        );
    }
 
 }

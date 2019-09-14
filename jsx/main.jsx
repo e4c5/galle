@@ -29,9 +29,9 @@ class Draw extends React.Component {
 	
 }
 /**
- * The controller
+ * The main component
  */
-class Controller extends React.Component {
+class Main extends React.Component {
 	/**
 	 * The constructor
 	 */
@@ -199,6 +199,8 @@ class Controller extends React.Component {
 
 const elem = document.getElementById('root-settings') 
 ReactDOM.render(
-  
-     <Controller tournament_id={elem.dataset.tournament}/>, elem
+   <TournamentProvider>
+     <Main tournament_id={elem.dataset.tournament}/>
+   </TournamentProvider>  
+     , elem
 );

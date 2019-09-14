@@ -221,7 +221,7 @@ class Participant(models.Model):
     games = models.IntegerField(default=0, null=True)
     wins = models.FloatField(default=0, null=True)
 
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='participants')
 
     spread = models.IntegerField(default=0, null=True)
     position = models.IntegerField(default=0, null=True)
