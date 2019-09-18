@@ -16,6 +16,10 @@ class Player(models.Model):
     full_name = models.TextField()
     country = models.TextField(default='SL')
     slug = models.TextField(unique=True)
+    wespa_rating = models.IntegerField(null=True)
+    national_rating = models.IntegerField(null=True)
+    wespa_games = models.IntegerField(default=0)
+    national_games = models.IntegerField(default=0)
     
     def __str__(self):
         return self.full_name

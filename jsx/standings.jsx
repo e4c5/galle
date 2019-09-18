@@ -24,8 +24,8 @@ class PlayerStanding extends React.Component {
 	componentDidUpdate(prevProps) {
 		/*
 		 * Using both component did upadate and component did mount in this
-		 * manner is crucial to making to UI updat when the use clicks a link
-		 * to another player with in a player standing page
+		 * manner is crucial to making the UI update when the user clicks a link
+		 * to another player within a player standing page
 		 */
 		if(prevProps !== undefined && prevProps.match.params.id != this.props.match.params.id) {
 			this.load(this.props.match.params.id)
