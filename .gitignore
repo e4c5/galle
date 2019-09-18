@@ -74,3 +74,4 @@ var TournamentProvider = function (_React$Component) {
 }(React.Component);pair/static/js/context.js
 pair/static/js/main.js
 pair/static/js/context.js
+pair/static/js/autocomplete.js
