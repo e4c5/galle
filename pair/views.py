@@ -5,13 +5,13 @@ from pair.models import TournamentRound, RoundResult, Participant, Tournament, P
 from tools import tsh_to_json
 
   
-def home(request):
+def home(request, slug=None):
     '''
     The home page.
     
     Currently a list of tournaments
     '''
-    return render(request, "index.html", {'tournaments': Tournament.objects.all()})
+    return render(request, "index.html")
 
 def start(request, slug=None):
     '''
@@ -51,10 +51,6 @@ def import_tsh(request):
     else:
         form = forms.UploadForm()
     return render(request, 'import.html', {'form': form, 'message': message})
-
         
-def tournament(request, slug):
-    tournament = Tournament.objects.get(slug=slug);
-    return render(request, "tournament.html", {'tournament': tournament});
 
     

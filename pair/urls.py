@@ -21,7 +21,7 @@ from pair import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tournament/<slug:slug>/', views.tournament),
+    path('tournament/<slug:slug>/', views.home),
     path('api/', include('api.urls')),
     path('', views.home),
     path('start/', views.start),
