@@ -49,71 +49,6 @@ class Main extends React.Component {
     	this.submitResult = this.submitResult.bind(this);
     }
 
-	/**
-	 * Fetch the data when the component has mounted
-	 */
-	componentDidMount() {
-		
-		if(this.context.basePath === null) {
-			this.context.setBasePath(window.location.pathname)
-		}
-		
-		let url = `/api/${this.props.tournament_id}/participant`;
-		axios.get(url).then(
-			response => {
-				const standings = response.data;
-
-				standings.sort(function(a,b){
-					if(a.wins == b.wins) {
-						if(a.games == b.games) {
-							return b.spread - a.spread;
-						}
-						return b.games - a.games;
-					}
-					return b.wins - a.wins;
-				});
-				this.setState({'standings': standings});
-				this.context.setParticipants(standings);
-			}
-		);
-		
-		url = `/api/${this.props.tournament_id}/`;
-		axios.get(url).then(
-			response => {
-				this.context.setTournament(response.data);
-
-				/* on success we load the results */
-				let url = `/api/results/${this.props.tournament_id}/?round=${response.data.current_round}`;
-				axios.get(url).then(
-					response => {
-						const completed = [];
-						const pending = [];
-						response.data.map(item => {
-							if(item.score_for) {
-								if(! completed.length) {
-									completed.push(item);
-								}
-								else if(! completed.filter(old => old.participant == item.opponent).length) {
-									completed.push(item);
-								}
-							}
-							else{
-								if(!pending.length) {
-									pending.push(item);
-								}
-								else if(! pending.filter(old => old.participant == item.opponent).length) {
-									pending.push(item);
-								}
-							}
-						});
-
-						this.setState({'completed': completed, 'pending': pending});
-					}
-				);
-			}
-		);
-	}
-
 	findMatches(c) {
 		return this.state.pending.filter(item => c.length > 1 && item.participant.toLowerCase().search(c) != -1).slice(0, 4);
 	}	
@@ -201,12 +136,3 @@ class Main extends React.Component {
 	}
 }
 
-
-
-const elem = document.getElementById('root-settings') 
-ReactDOM.render(
-   <TournamentProvider>
-     <Main tournament_id={elem.dataset.tournament}/>
-   </TournamentProvider>  
-     , elem
-);
