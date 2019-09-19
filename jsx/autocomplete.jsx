@@ -4,9 +4,6 @@
  * 
  */
 class Autocomplete extends React.Component {
-	static propTypes = {
-		suggestions: PropTypes.instanceOf(Array)
-	};
 	static defaultProperty = {
 		suggestions: []
 	};
