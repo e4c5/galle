@@ -44,7 +44,7 @@ class TournamentListSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = Tournament
-        fields = ('id','name', 'start_date', 'rated')
+        fields = ('id','name', 'start_date', 'rated', 'slug')
 
 
 class TournamentDetailSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
     This serializer is for individual tournaments
     '''
     rounds = RoundSerializer(many=True)
-
+    
     def create(self, validated_data):
         rounds = validated_data.pop('rounds') 
         tournament = Tournament.objects.create(**validated_data)

@@ -10,6 +10,7 @@ class TournamentViewSet(viewsets.ModelViewSet):
     '''
     Handles the tournaments
     '''
+    lookup_field = 'slug'
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.TournamentListSerializer
@@ -55,4 +56,4 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         tournament = self.kwargs['tournament']
-        return Participant.objects.select_related('player').filter(tournament_id=tournament)
+        return Participant.objects.select_related('player').filter(tournament_id=tournament).order_by('position')
