@@ -11,7 +11,7 @@ class PlayerStanding extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.state = {loaded: false, participant_id: null};
+		this.state = {loaded: false, participant_id: null, edit_row: -1};
 	}
 	
 	load(participant_id) {
@@ -37,11 +37,39 @@ class PlayerStanding extends React.Component {
 	}
 
 	editRow(e, idx) {
-		console.log(idx);
+		this.setState({edit_row: idx, score_against: this.state.results[idx].score_against, 
+			    score_for: this.state.results[idx].score_for })
+	}
+	
+	updateScores(evt) {
+		evt.preventDefault()
+		if(evt.target.name == 'update') {
+			this.state.results[this.state.edit_row].score_for = this.state.score_for
+			this.state.results[this.state.edit_row].score_against = this.state.score_against
+			this.setState({edit_row: -1})	
+		}
+		if(evt.target.name == 'cancel') {
+			this.setState({edit_row: -1})	
+		}
+		else {
+			const state = {...this.state}
+			state[evt.target.name] = evt.target.value;
+			this.setState(state)
+		}
+	} 
+	
+	buildEditRow() {
+		return <React.Fragment>
+			<td><input type='number' className='form-control' name='score_for' value={this.state.score_for} onClick={e => this.updateScores(e)}/></td>
+			<td><input type='number' className='form-control' name='score_against' value={this.state.score_against} onClick={e => this.updateScores(e)}/></td>
+			<td><button className='btn btn-primary' name='update' onClick={e => this.updateScores(e)}>Update</button>
+            	<button className='btn btn-secondar' name='cancel' onClick={e => this.updateScores(e)} >Cancel</button></td>
+            </React.Fragment>
 	}
 	
 	render() {
 		if(this.state.loaded) {
+			console.log(this.state)
 			return(<div><h1>{this.state.current_player}</h1>
 				<table className='table table-bordered'>  
 				  <thead className='thead-light'>
@@ -56,8 +84,8 @@ class PlayerStanding extends React.Component {
 						     <td>{ item.opponent != "Bye" ? <Link to={"../" + item.opponent_id + "/"}>{item.opponent}</Link>
 						                                  : item.opponent }
 						     </td>
-						     <td>{item.score_for}</td><td>{item.score_against}</td>
-						     <td>{item.spread}</td>
+						     { this.state.edit_row == idx ? this.buildEditRow()
+						    		 : (<React.Fragment><td>{item.score_for}</td><td>{item.score_against}</td><td>{item.spread}</td></React.Fragment>) }
 						  </tr>)
 					)}
 				  </tbody>
@@ -96,7 +124,6 @@ class Standings extends React.Component {
 	}
 	
 	getLink(s) {
-		console.log(s)
 		const location = this.props.location.pathname
 		if (location.endsWith('/')) {
 			return location + s

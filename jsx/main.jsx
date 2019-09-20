@@ -44,11 +44,11 @@ class Main extends React.Component {
     	super(props);
     	this.state = {'standings': [], 'pending': [], 'completed': [],
     			errors: '', round: 0}
-    	
-    	
     	this.submitResult = this.submitResult.bind(this);
+    	console.log("MAIN constructor")
     }
 
+	
 	findMatches(c) {
 		return this.state.pending.filter(item => c.length > 1 && item.participant.toLowerCase().search(c) != -1).slice(0, 4);
 	}	
@@ -96,39 +96,42 @@ class Main extends React.Component {
 	}
 	
 	
+	
     render() {
+    	
+    	console.log("RENDER IN MAIN")
     	return(<Router>
     	  <div>
 		    	 <nav className='navbar'>
-		           <Link className="nav-link active" to={this.context.basePath}>Standings</Link>
+		           <Link className="nav-link active" to={ location => { console.log(location); return 'bada'}}>Standings</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'scoring'}>Scoring</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'draw'}>Draw</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'rounds'}>Rounds</Link>
 		           <Link className="nav-link" to={this.context.basePath + 'settings'}>Settings</Link>
 		        </nav>
 		        <Switch>
-      
-			    	<Route exact path={this.context.basePath }
+		        	<Route exact path="/tournament/:slug"
 			       	    render={(props) => <Standings {...props} standings={this.state.standings}  /> }
-					 />
-			        <Route path={this.context.basePath + 'pairing'}
+					  />
+					 
+			         <Route path="/tournament/:slug/pairing"
 			        	 render={(props) => 
 					  	   <Pairing round={this.props.round} tournament_id={this.props.tournament_id} 
 					  	       completed={this.state.completed} pending={this.state.pending} submitResult={this.submitResult}/>}
 					 />
-					 <Route path={this.context.basePath + "draw"}
+					 <Route path="/tournament/:slug/draw"
 						 render={props => 
 					       <Draw completed={this.state.completed} pending={this.state.pending} />}
 					 />
-			         <Route path={this.context.basePath + "settings"}
+			         <Route path="/tournament/:slug/settings"
 							 render={props => 
 						       <Settings />}
-					 />" +
-					 <Route path={this.context.basePath + "rounds"} component={Rounds} />
-					 <Route path={ this.context.basePath + "player/:id/"}
+					 />
+					 <Route path="/tournament/:slug/rounds" component={Rounds} />
+					 <Route path="/tournament/:slug/player/:id/"
 										render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
 								     />
-			       </Switch>
+		       </Switch>
 						       
 		  </div>
 	     </Router>	
