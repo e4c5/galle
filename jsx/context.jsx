@@ -6,7 +6,7 @@ class TournamentProvider extends React.Component {
 	}
 	
 	setTournament = (tournament) => {
-		this.setState({tournament: tournament});
+		this.setState({tournament: tournament, basePath: '/tournament/' + tournament.slug});
 	}
 	
 	setParticipants = (participants) => {
@@ -30,7 +30,8 @@ class TournamentProvider extends React.Component {
        basePath: null,
        setTournament: this.setTournament,
        setParticipants: this.setParticipants,
-       setBasePath: this.setBasePath
+       setBasePath: this.setBasePath,
+       getParticipant: this.getParticipant
     };
 
     render() {

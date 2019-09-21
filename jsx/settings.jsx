@@ -86,12 +86,11 @@ class Settings extends React.Component {
 	 */
 	submitForm(evt) {
 		evt.preventDefault();
-		axios.post('/api/', this.context.tournament).then(
+		axios.post('/api/', this.state.tournament).then(
 				response => { console.log("Tournament updated") });
 	}
 	
 	render() {
-		console.log("Settings")
 		if(this.state.ready) {
 			let button = null;
 			if(this.state.tournament.rounds.length == 0 || this.state.tournament.name == '') {
@@ -101,6 +100,7 @@ class Settings extends React.Component {
 				button = <input type='submit' className='btn btn-primary' value='Submit' /> 
 			}	
 			return(<div>
+			    {this.state.tournament.id ? <h1>Edit Settings</h1> : <h1>Create new tournament</h1>}
 				{this.state.errors &&  <div className='alert alert-error'>{this.state.errors}</div>  }
 					<form className="form" onSubmit={evt => this.submitForm(evt) }>
 						<div className='row align-items-center'>
@@ -116,11 +116,13 @@ class Settings extends React.Component {
 						    <div className='col-2'>Number of rounds</div>
 						    <div className='col-2'><input type="number" onChange={evt => this.roundsChange(evt)} className='form-control' /></div>
 						    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-						       <label className="btn btn-secondary active">
-						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' checked /> Rated
+						       <label className="btn btn-secondary">
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} value={1} 
+						    	      name='rated' checked={this.state.rated == 1} /> Rated
 						       </label>
 						       <label className="btn btn-secondary">	 
-						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' /> Unrated
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} 
+						    	     name='rated'  checked={this.state.rated == 0} value={0} /> Unrated
 						       </label>
 						    </div>
 						</div>

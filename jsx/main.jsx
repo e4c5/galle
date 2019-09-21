@@ -14,12 +14,10 @@ class Rounds extends React.Component {
 
 class Draw extends React.Component {
 	constructor(props){ 
-		console.log(props);
 		super(props)
 	}
 	
 	render() {
-		console.log(this.props);
 		return (<div>
 			       <table className='table'><tbody>
 			        {this.props.pending.map(item => (
@@ -45,7 +43,7 @@ class Main extends React.Component {
     	this.state = {'standings': [], 'pending': [], 'completed': [],
     			errors: '', round: 0}
     	this.submitResult = this.submitResult.bind(this);
-    	console.log("MAIN constructor")
+    	console.log("constrcut main")
     }
 
 	
@@ -96,18 +94,18 @@ class Main extends React.Component {
 	}
 	
 	
-	
+	/**
+	 * This component render the router and a set of links
+	 */
     render() {
-    	
-    	console.log("RENDER IN MAIN")
     	return(<Router>
     	  <div>
 		    	 <nav className='navbar'>
-		           <Link className="nav-link active" to={ location => { console.log(location); return 'bada'}}>Standings</Link>
-		           <Link className="nav-link" to={this.context.basePath + 'scoring'}>Scoring</Link>
-		           <Link className="nav-link" to={this.context.basePath + 'draw'}>Draw</Link>
-		           <Link className="nav-link" to={this.context.basePath + 'rounds'}>Rounds</Link>
-		           <Link className="nav-link" to={this.context.basePath + 'settings'}>Settings</Link>
+		           <Link className="nav-link active" to={ this.context.basePath }>Standings</Link>
+		           <Link className="nav-link" to={ this.context.basePath + 'scoring' }>Scoring</Link>
+		           <Link className="nav-link" to={ this.context.basePath + 'draw' }>Draw</Link>
+		           <Link className="nav-link" to={ this.context.basePath + 'rounds' }>Rounds</Link>
+		           <Link className="nav-link" to={ this.context.basePath + 'settings' }>Settings</Link>
 		        </nav>
 		        <Switch>
 		        	<Route exact path="/tournament/:slug"
@@ -129,7 +127,7 @@ class Main extends React.Component {
 					 />
 					 <Route path="/tournament/:slug/rounds" component={Rounds} />
 					 <Route path="/tournament/:slug/player/:id/"
-										render={(props) => <PlayerStanding {...props} tournament_id={this.props.tournament_id}/> }
+										render={(props) => <PlayerResult {...props} tournament_id={this.props.tournament_id}/> }
 								     />
 		       </Switch>
 						       

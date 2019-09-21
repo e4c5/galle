@@ -6,7 +6,10 @@ const Prompt =  window.ReactRouterDOM.Prompt;
 const Switch = window.ReactRouterDOM.Switch;
 const Redirect = window.ReactRouterDOM.Redirect;
 
-class PlayerStanding extends React.Component {
+/**
+ * A players results in each round.
+ */
+class PlayerResult extends React.Component {
 	static contextType = TournamentContext
 	
 	constructor(props) {
@@ -15,10 +18,13 @@ class PlayerStanding extends React.Component {
 	}
 	
 	load(participant_id) {
-		axios.get(`/api/${this.context.tournament.id}/results/?participant=${participant_id}`).then(response => {
-			this.setState({'results': response.data, 'loaded': true, 
-				'participant_id': participant_id});
-		});
+		const ctx = this.context
+		if(ctx.tournament) {
+			axios.get(`/api/${ctx.tournament.id}/results/?participant=${participant_id}`).then(response => {
+				this.setState({results: response.data, loaded: true, 
+					current_player: this.context.getParticipant(participant_id)});
+			});
+		}
 	}
 	
 	componentDidUpdate(prevProps) {
@@ -37,8 +43,10 @@ class PlayerStanding extends React.Component {
 	}
 
 	editRow(e, idx) {
-		this.setState({edit_row: idx, score_against: this.state.results[idx].score_against, 
+		if(this.state.edit_row != idx) {
+			this.setState({edit_row: idx, score_against: this.state.results[idx].score_against, 
 			    score_for: this.state.results[idx].score_for })
+		}
 	}
 	
 	updateScores(evt) {
@@ -67,25 +75,33 @@ class PlayerStanding extends React.Component {
             </React.Fragment>
 	}
 	
+	humanize(num) {
+		switch(num % 10){
+			case 1: return 'st'
+			case 2: return 'nd'
+			case 3: return 'rd'
+			default: return 'th'
+		}
+	}
 	render() {
 		if(this.state.loaded) {
-			console.log(this.state)
-			return(<div><h1>{this.state.current_player}</h1>
+			const current = this.state.current_player
+			return(<div><h1>{current.player}</h1>
+			 <h2>In {current.position}{ this.humanize(current) } place with { current.wins } wins and a margin of { current.spread }</h2>
 				<table className='table table-bordered'>  
 				  <thead className='thead-light'>
-				     <tr><th>Round</th><th>Opponent</th><th>Score</th><th>Opponent Score</th><th>Spread</th></tr>
+				     <tr><th>Round</th><th>Opponent</th><th>Player Score</th><th>Opponent Score</th><th>Spread</th></tr>
 				  </thead>
 				  <tbody>
 					  {this.state.results.map( (item, idx) =>(
-						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}
-						     onClick={ e=> this.editRow(e, idx)}
-						  >
+						  <tr key={item.id} className={item.score_for > item.score_against ? "table-success" : "table-warning"}>
 						     <td>{item.round_no}</td>
-						     <td>{ item.opponent != "Bye" ? <Link to={"../" + item.opponent_id + "/"}>{item.opponent}</Link>
+						     <td className='opponent'>{ item.opponent != "Bye" ? <Link to={"../" + item.opponent_id + "/"}>{item.opponent}</Link>
 						                                  : item.opponent }
 						     </td>
 						     { this.state.edit_row == idx ? this.buildEditRow()
-						    		 : (<React.Fragment><td>{item.score_for}</td><td>{item.score_against}</td><td>{item.spread}</td></React.Fragment>) }
+						    		 : (<React.Fragment><td onClick={ e=> this.editRow(e, idx)}>{item.score_for}</td>
+						    		                    <td onClick={ e=> this.editRow(e, idx)}>{item.score_against}</td><td>{item.spread}</td></React.Fragment>) }
 						  </tr>)
 					)}
 				  </tbody>
@@ -102,6 +118,7 @@ class Standings extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {current_player: '', results: []}
+		console.log("Constrcut standings")
     }
 	
 	componentDidMount() {
@@ -114,8 +131,8 @@ class Standings extends React.Component {
 					const tournament = response.data
 					axios.get(`/api/${tournament.id}/participant/`).then(
 						response => {
-							tournament.participants = response.data
 							this.context.setTournament(tournament)
+							this.context.setParticipants(response.data)
 						}
 					)
 				}
@@ -134,13 +151,19 @@ class Standings extends React.Component {
 	}
 	
 	render() {
-		 
+		if(this.context.tournament == null) {
+			return null;
+		}
 		return (
+		    <div>
+		      <h1>{this.context.tournament.name}</h1>
 	          <table className='table'>
 	            <thead><tr><th>Position</th><th>Player</th><th>Wins</th><th>Losses</th><th>Spread</th></tr></thead>
 	            <tbody>
-					{this.context.tournament && this.context.tournament.participants.map((item, idx) =>  
+					{this.context.tournament && this.context.participants && 
+						Object.keys(this.context.participants).map( idx =>  
 					   {
+						   const item = this.context.participants[idx]
 						   if(item.player != 'Bye') {
 							   return (<tr key={item.player}>
 									    <td>{ item.position }</td>
@@ -157,6 +180,7 @@ class Standings extends React.Component {
 					}
 	           </tbody>
 	          </table>
+	       </div>
         );
    }
 
