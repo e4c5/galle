@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from django.db.models import Q
@@ -21,6 +21,18 @@ class TournamentViewSet(viewsets.ModelViewSet):
         return Tournament.objects.prefetch_related('rounds').all()
         
         
+    
+    def create(self, request, *args, **kwargs):
+        '''
+        Create a new tournament from post data
+        '''
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    
 class ResultViewSet(viewsets.ModelViewSet):
     '''
     Handles displaying and updating results of a tournament

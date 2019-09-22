@@ -21,9 +21,13 @@ from pair import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tournament/<slug:slug>/', views.home),
-    path('api/', include('api.urls')),
     path('', views.home),
+    path('tournament', views.home),
+    path('tournament/<slug:slug>/', views.home),
+    path('tournament/<slug:slug>/player/<int:player>/', views.home),
+    
+    path('api/', include('api.urls')),
+    
     path('start/', views.start),
     path('import/', views.import_tsh),
     path('start/<slug:slug>/', views.start),

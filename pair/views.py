@@ -5,7 +5,7 @@ from pair.models import TournamentRound, RoundResult, Participant, Tournament, P
 from tools import tsh_to_json
 
   
-def home(request, slug=None):
+def home(request, slug=None, player=None):
     '''
     The home page.
     
