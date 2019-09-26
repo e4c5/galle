@@ -93,20 +93,31 @@ class Main extends React.Component {
 		}
 	}
 	
-	
-	/**
-	 * This component render the router and a set of links
-	 */
-    render() {
-    	return(<Router>
-    	  <div>
-		    	 <nav className='navbar'>
+
+	navBar() {
+		if(this.context.basePath !== null) {
+			console.log(this.context.basePath)
+		
+			return(
+				<nav className='navbar'>
 		           <Link className="nav-link active" to={ this.context.basePath }>Standings</Link>
 		           <Link className="nav-link" to={ this.context.basePath + 'scoring' }>Scoring</Link>
 		           <Link className="nav-link" to={ this.context.basePath + 'draw' }>Draw</Link>
 		           <Link className="nav-link" to={ this.context.basePath + 'rounds' }>Rounds</Link>
 		           <Link className="nav-link" to={ this.context.basePath + 'settings' }>Settings</Link>
-		        </nav>
+		        </nav>)			
+		}
+		return null
+	}
+	/**
+	 * This component render the router and a set of links
+	 */
+    render() {
+    	console.log("Render main")
+    	
+    	return(<Router>
+    	  <div> 
+    	        { this.navBar() }
 		        <Switch>
 		        	<Route exact path="/tournament/:slug"
 			       	    render={(props) => <Standings {...props} standings={this.state.standings}  /> }

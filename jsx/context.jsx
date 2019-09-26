@@ -2,11 +2,18 @@ const TournamentContext = React.createContext({})
 
 class TournamentProvider extends React.Component {
 	setBasePath = (path) => {
-		this.setState({basePath: path})
+		if(path.endswith('/')) {
+			this.setState({basePath: path})
+		}
+		else{
+			this.setState({basePath: path + "/"})
+		}
 	}
 	
 	setTournament = (tournament) => {
-		this.setState({tournament: tournament, basePath: '/tournament/' + tournament.slug});
+
+		this.setState({tournament: tournament, 
+			 basePath: '/tournament/' + tournament.slug + '/'});
 	}
 	
 	setParticipants = (participants) => {

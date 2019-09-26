@@ -44,6 +44,9 @@ class Importer extends React.Component {
 	}
 }
 
+/**
+ * Creates a list of tournaments.
+ */
 class Tournaments extends React.Component {
 	static contextType = TournamentContext
 	
@@ -100,8 +103,6 @@ class Start extends React.Component {
 		)
 	}
 }
-
-
 
 ReactDOM.render(
 	<TournamentProvider>

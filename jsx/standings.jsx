@@ -129,8 +129,10 @@ class Standings extends React.Component {
 			axios.get(url).then(
 				response => {
 					const tournament = response.data
+					console.log("Get tournament 1")
 					axios.get(`/api/${tournament.id}/participant/`).then(
 						response => {
+							console.log("Get tournament 2")
 							this.context.setTournament(tournament)
 							this.context.setParticipants(response.data)
 						}
