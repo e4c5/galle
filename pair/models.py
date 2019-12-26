@@ -10,8 +10,10 @@ from django.db.models import Sum
 
 class Player(models.Model):
     '''
-    This is someone who has taken part in at least one tournament
-    conducted by the Sri Lanka Scrabble League
+    A list of all known players.
+    This table needs to be rather complicated because we cannot have records
+    of all the tournaments that a player has taken part in. If we did we 
+    could have simply used a join to get that data.
     '''
     full_name = models.TextField()
     country = models.TextField(default='SL')
@@ -20,6 +22,8 @@ class Player(models.Model):
     national_rating = models.IntegerField(null=True)
     wespa_games = models.IntegerField(default=0)
     national_games = models.IntegerField(default=0)
+    last_national = models.DateField(null=True)
+    last_wespa = models.DateField(null=True)
     
     def __str__(self):
         return self.full_name
