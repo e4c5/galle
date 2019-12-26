@@ -149,6 +149,7 @@ class Settings extends React.Component {
 					  ))}
 						{button}
 					</form>
+					<Players />
 				</div>)
 		}
 		else {

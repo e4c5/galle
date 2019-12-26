@@ -86,7 +86,7 @@ class PlayerResult extends React.Component {
 	render() {
 		if(this.state.loaded) {
 			const current = this.state.current_player
-			return(<div><h1>{current.player}</h1>
+			return(<div><h1>{current.player.full_name}</h1>
 			 <h2>In {current.position}{ this.humanize(current) } place with { current.wins } wins and a margin of { current.spread }</h2>
 				<table className='table table-bordered'>  
 				  <thead className='thead-light'>
@@ -167,9 +167,9 @@ class Standings extends React.Component {
 					   {
 						   const item = this.context.participants[idx]
 						   if(item.player != 'Bye') {
-							   return (<tr key={item.player}>
+							   return (<tr key={item.id}>
 									    <td>{ item.position }</td>
-										<td><Link to={ this.getLink('player/' + item.id.toString() + '/')  }>{item.player}</Link> </td>
+										<td><Link to={ this.getLink('player/' + item.id.toString() + '/')  }>{item.player.full_name}</Link> </td>
 										<td>{item.wins}</td>
 										<td>{item.games - item.wins}</td>
 										<td>{item.spread}</td>
