@@ -118,7 +118,6 @@ class Standings extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {current_player: '', results: []}
-		console.log("Constrcut standings")
     }
 	
 	componentDidMount() {
@@ -129,10 +128,8 @@ class Standings extends React.Component {
 			axios.get(url).then(
 				response => {
 					const tournament = response.data
-					console.log("Get tournament 1")
 					axios.get(`/api/${tournament.id}/participant/`).then(
 						response => {
-							console.log("Get tournament 2")
 							this.context.setTournament(tournament)
 							this.context.setParticipants(response.data)
 						}
@@ -153,37 +150,41 @@ class Standings extends React.Component {
 	}
 	
 	render() {
-		if(this.context.tournament == null) {
-			return null;
-		}
-		return (
-		    <div>
-		      <h1>{this.context.tournament.name}</h1>
-	          <table className='table'>
-	            <thead><tr><th>Position</th><th>Player</th><th>Wins</th><th>Losses</th><th>Spread</th></tr></thead>
-	            <tbody>
-					{this.context.tournament && this.context.participants && 
-						Object.keys(this.context.participants).map( idx =>  
-					   {
-						   const item = this.context.participants[idx]
-						   if(item.player != 'Bye') {
-							   return (<tr key={item.id}>
+		const tourn = this.context.tournament;
+		
+		if(tourn && this.context.participants) {
+			/* filter those who didn't show up and sort */
+			const participants = Object.values(this.context.participants).filter(p => {
+				if(p.player.full_name == 'Bye') return false;
+				if(tourn.current_round && tourn.current_round > 1 && p.position == 0) return false;
+				return true
+			})
+			participants.sort( (a,b) => { return a.position - b.position })
+			
+			return (
+			    <div>
+			      <h1>{this.context.tournament.name}</h1>
+		          <table className='table'>
+		            <thead><tr><th>Position</th><th>Player</th><th>Wins</th><th>Losses</th><th>Spread</th></tr></thead>
+		            <tbody>
+						{ 
+	    				   participants.map( item =>  
+						   {
+	 						   return (<tr key={item.id}>
 									    <td>{ item.position }</td>
 										<td><Link to={ this.getLink('player/' + item.id.toString() + '/')  }>{item.player.full_name}</Link> </td>
 										<td>{item.wins}</td>
 										<td>{item.games - item.wins}</td>
 										<td>{item.spread}</td>
 										</tr>)
-						   }
-						   else {
-							   return null
-						   }
-					   })
-					}
-	           </tbody>
-	          </table>
-	       </div>
-        );
+						   })
+						}
+		           </tbody>
+		          </table>
+		       </div>
+	        );
+		}
+		return null;
    }
 
 }

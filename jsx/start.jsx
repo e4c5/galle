@@ -6,19 +6,21 @@ axios.defaults.xsrfCookieName = "csrftoken";
 class Importer extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {uploading: 0, file: null, message: ''}
+		this.state = {uploading: 0, 
+			config: null, data: null, message: ''}
 	}
 	
 	onChangeHandler(e) { 
-		this.setState({file : e.target.files[0] })
-		console.log(e.target.files[0])
+		this.setState({[e.target.name] : e.target.files[0]})
 	}
 	
 	onClickHandler(e) { 
-		if(this.state.file !== null) {
+		if(this.state.config !== null && this.state.data !== null) {
 			 const data = new FormData() 
-			 data.append('upload', this.state.file)
+			 data.append('config', this.state.config)
+			 data.append('data', this.state.data)
 			 this.setState({uploading: 1})
+			 
 			 axios.post("/api/upload/", data, {
 			      headers: {
 			           'content-type': 'multipart/form-data'
@@ -30,14 +32,16 @@ class Importer extends React.Component {
 			 })
 		}
 		else {
-			setMessage('Please choose either your Anagrams.db or Hooks.db file')
+			setMessage('Please choose your config.tsh file and your a.t file')
 		}
     }
 	
 	render() {
 		return (
 		   <div>
-		      <input type="file" name="file" onChange={e => this.onChangeHandler(e)} className='form-control'/>
+		      <input type="file" name="config" onChange={e => this.onChangeHandler(e)} className='form-control'/>
+		      <input type="file" name="data" onChange={e => this.onChangeHandler(e)} className='form-control'/>
+		    	  
 		      <button type="button" className="btn btn-success btn-block" onClick={e => this.onClickHandler(e)}>Upload</button>
 		      <div>{this.state.message}</div>
 		   </div>)

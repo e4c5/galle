@@ -45,6 +45,7 @@ class Autocomplete extends React.Component {
 			userInput: e.currentTarget.innerText
 		});
 	};
+	
 	onKeyDown = e => {
 		const { activeSuggestion, filteredSuggestions } = this.state;
 

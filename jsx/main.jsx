@@ -7,8 +7,60 @@ const Redirect = window.ReactRouterDOM.Redirect;
  
 
 class Rounds extends React.Component {
+	static contextType = TournamentContext
+	
+	constructor(props) {
+		super(props);
+		this.state = {loaded: false, round_no: 1, edit_row: -1};
+	}
+	
+	componentDidMount() {
+		
+		if(this.context.tournament) {
+			axios.get(`/api/${this.context.tournament.id}/results/`).then(response => {
+				this.setState({results: response.data, loaded: true});
+			});
+		}
+	}
+	
+	roundChange(e) {
+		this.setState({round_no: evt.target.value})
+	}
+	
+	
 	render() {
-		return "Rounds baby rounds"
+		if(this.state.loaded) {
+			const results = this.state.results.filter(r => { return r.round_no == this.state.round_no})
+			return(
+				<React.Fragment>
+					<div className='row align-items-center'>
+					    <div className='col-8'>
+					    Display results for round number:
+					    </div>
+					    <div className='col-2'><input type='number' onChange={evt => this.roundChange(evt)} className='form-control' /></div>
+				    </div>
+				    <table className='table table-bordered'>  
+					  <thead className='thead-light'>
+					     <tr><th>Round</th><th>Player Score</th><th>Opponent</th><th>Opponent Score</th><th>Spread</th></tr>
+					  </thead>
+					  <tbody>
+						  {results.map( (item, idx) =>(
+							  <tr key={item.id}>
+							     <td className='player'> { item.participant }</td>
+							     <td>{item.score_for}</td>
+							     <td className='opponent'>{ item.opponent != "Bye" ? <Link to={"../" + item.opponent_id + "/"}>{item.opponent}</Link>
+							                                  : item.opponent }
+							     </td>
+							     <td>{item.score_against}</td>
+							     <td>{item.score_for - item.score_against}</td>
+							  </tr>)
+						)}
+					  </tbody>
+					</table>
+			   </React.Fragment>
+		    )
+		}
+		return null;
 	}
 }
 
@@ -123,7 +175,7 @@ class Main extends React.Component {
 			       	    render={(props) => <Standings {...props} standings={this.state.standings}  /> }
 					  />
 					 
-			         <Route path="/tournament/:slug/pairing"
+			         <Route path="/tournament/:slug/scoring"
 			        	 render={(props) => 
 					  	   <Pairing round={this.props.round} tournament_id={this.props.tournament_id} 
 					  	       completed={this.state.completed} pending={this.state.pending} submitResult={this.submitResult}/>}
