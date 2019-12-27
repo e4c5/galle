@@ -155,8 +155,10 @@ class Tournament(models.Model):
         That is the round that is in progress. None if the tournament has concluded. 
         '''
         try:
-            rnd = self.rounds.filter(roundresult__score_for=None).order_by('-round_no')[0]
-            return rnd.round_no
+            if self.rounds.all()[0].roundresult_set.count() > 0:
+                rnd = self.rounds.filter(roundresult__score_for=None).order_by('-round_no')[0]
+                return rnd.round_no
+            return 0
         except IndexError:
             return None
         

@@ -2,7 +2,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.parsers import FormParser, MultiPartParser
-
+from rest_framework.exceptions import ValidationError
 from django.db.models import Q
 
 from api import serializers
@@ -14,6 +14,7 @@ class TournamentViewSet(viewsets.ModelViewSet):
     Handles the tournaments
     '''
     lookup_field = 'slug'
+    
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.TournamentListSerializer
@@ -89,6 +90,36 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         tournament = self.kwargs['tournament']
         return Participant.objects.select_related('player').filter(tournament_id=tournament).order_by('position')
     
+    
+    def create(self, request, *args, **kwargs):
+        '''
+        Create a new participant from the post data. 
+        
+        A player record should already exists.
+        '''
+        serializer = serializers.ParticipantCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        tournament = Tournament.objects.get(pk=self.kwargs['tournament'])
+        try:
+            player = Player.objects.get(pk=serializer.data['player_id'])
+            
+            
+            participant = Participant.objects.create(player_id=player.id,
+                                                               tournament_id=tournament.id,
+                                                               old_rating=player.national_rating,
+                                                               games=tournament.current_round,
+                                                               wins=0, offed=0,spread=0,
+                                                               seed=self.get_queryset().count()+1,
+                                                               position=0
+                                                               )
+            
+            headers = self.get_success_headers(serializer.data)
+            serializer = self.get_serializer(participant)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Player.DoesNotExist:
+            raise ValidationError("Player does not exist")
+        
     
 class FileUploadView(generics.GenericAPIView):
     parser_classes = [FormParser, MultiPartParser]

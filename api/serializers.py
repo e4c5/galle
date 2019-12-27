@@ -50,6 +50,10 @@ class ParticipantSerializer(serializers.ModelSerializer):
                   'new_rating','old_rating','position','offed')
 
 
+class ParticipantCreateSerializer(serializers.Serializer):
+    player_id = serializers.IntegerField()
+    
+
 class TournamentListSerializer(serializers.ModelSerializer):
     '''
     This serializer is only used to display the list of tournaments
