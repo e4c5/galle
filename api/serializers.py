@@ -1,7 +1,20 @@
 from rest_framework import serializers
-from pair.models import TournamentRound, RoundResult, Participant, Tournament
+from pair.models import TournamentRound, RoundResult, Participant, Tournament, Player
 
+
+class PlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = ['id', 'full_name', 'country', 'slug', 'wespa_rating', 'national_rating']
+        
+        
 class RoundSerializer(serializers.ModelSerializer):
+    '''
+    A round in our tournament
+    
+    The information includes pairing system, number of repeates, which round
+    standings are used for pairing etc
+    '''
     class Meta:
         model = TournamentRound
         fields = ('id','round_no','spread_cap','pairing_system','repeats','based_on')
@@ -23,14 +36,13 @@ class ResultSerializer(serializers.ModelSerializer):
                   'first', 'round_no','spread')
         
         
-        
 class ParticipantSerializer(serializers.ModelSerializer):
     '''
     Used for listing of participants
     For example used by TournamentDetailSerializer to add the list of players
     who took part in the event.
     '''
-    player = serializers.StringRelatedField()
+    player = PlayerSerializer(read_only=True)
 
     class Meta:
         model = Participant
@@ -67,5 +79,17 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
         fields = ('id','name', 'start_date', 'rated', 'num_rounds','current_round',
                   'rounds','slug')
         
-                
-# update pair_roundresult set score_for = NULL , score_against=NULL where game_id=36
+
+class FileUploadSerializer(serializers.Serializer):
+    '''
+    Serializer for importing from TSH.
+    
+    Two different files will be uploaded - the first being the config.tsh and the
+    second being the a.t file
+    '''
+    config = serializers.FileField()
+    data = serializers.FileField()
+    
+    
+    
+    

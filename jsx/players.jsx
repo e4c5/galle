@@ -27,8 +27,10 @@ class Players extends React.Component {
 			 <table>
 			   <thead><tr><th>Name</th><th>Rating</th><th></th></tr></thead>
 			   <tbody>
-			   {this.context.participants.map(p => {
-				   
+			   {participants.map(p => {
+				  return <tr key={p.id}><td>{p.player.full_name}</td>
+				    <td>{p.player.national_rating}</td>
+				  </tr>
 			   })}
 			   </tbody>
 		     </table>) 
