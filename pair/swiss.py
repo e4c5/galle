@@ -281,4 +281,6 @@ if __name__ == '__main__': #pragma nocover
     p = DbPairing(18, 2)
     
     for i, match in enumerate(p.make_it()):
-        print(i, match[0]['name'], match[1]['name'])
+        print(i, match[0], match[1]['name'])
+        
+        

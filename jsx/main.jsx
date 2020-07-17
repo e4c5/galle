@@ -148,7 +148,6 @@ class Main extends React.Component {
 
 	navBar() {
 		if(this.context.basePath !== null) {
-			console.log(this.context.basePath)
 		
 			return(
 				<nav className='navbar'>

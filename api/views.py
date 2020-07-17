@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.exceptions import ValidationError
-from django.db.models import Q
+
+from django.db import IntegrityError
 
 from api import serializers
 from pair.models import TournamentRound, RoundResult, Participant, Tournament, Player
@@ -119,7 +120,8 @@ class ParticipantViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         except Player.DoesNotExist:
             raise ValidationError("Player does not exist")
-        
+        except IntegrityError:
+            raise ValidationError("The player is already registered")
     
 class FileUploadView(generics.GenericAPIView):
     parser_classes = [FormParser, MultiPartParser]

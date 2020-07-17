@@ -13,6 +13,7 @@ class Autocomplete extends React.Component {
 				activeSuggestion: 0,
 				filteredSuggestions: [],
 				showSuggestions: false,
+				styles: {}
 		};
 	}
 
@@ -26,11 +27,12 @@ class Autocomplete extends React.Component {
 					suggestion =>
 					suggestion.full_name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
 			);
-	
+			const rect = e.target.getBoundingClientRect();
 			this.setState({
 				activeSuggestion: 0,
 				filteredSuggestions,
 				showSuggestions: true,
+				styles: { top: e.top + e.height + 10, left: e.left}
 			});
 		}
 		
@@ -89,7 +91,7 @@ class Autocomplete extends React.Component {
 		if (showSuggestions && userInput) {
 			if (filteredSuggestions.length) {
 				suggestionsListComponent = (
-						<table className="suggestions">
+						<table className="suggestions table" style={this.state.styles}>
 						  <thead><tr><th>Player Name</th><th>Rating</th></tr></thead>
 						  <tbody>
 							{filteredSuggestions.map((suggestion, index) => {

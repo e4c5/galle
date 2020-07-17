@@ -44,7 +44,7 @@ class TableRow extends React.Component {
 class Pairing extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {'current': '', 'matching': []}
+		this.state = {current: '', matching: []}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}

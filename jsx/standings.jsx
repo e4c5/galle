@@ -120,23 +120,31 @@ class Standings extends React.Component {
         this.state = {current_player: '', results: []}
     }
 	
+	loadParticipants(tournament) {
+		axios.get(`/api/${tournament.id}/participant/`).then(
+			response => {
+				this.context.setParticipants(response.data)
+			}
+		)
+	}
+	
 	componentDidMount() {
 		const ctx = this.context;
 
-		if(ctx.tournament === null || ctx.tournament.slug != this.props.match.params.slug) {
+		if(ctx.tournament === null) {
 			let url = `/api/${this.props.match.params.slug}/`;
 			axios.get(url).then(
 				response => {
 					const tournament = response.data
-					axios.get(`/api/${tournament.id}/participant/`).then(
-						response => {
-							this.context.setTournament(tournament)
-							this.context.setParticipants(response.data)
-						}
-					)
+					this.context.setTournament(tournament)
+					this.loadParticipants(tournament)
 				}
 			);
 		}
+		else if(ctx.tournament.slug != this.props.match.params.slug) {
+			this.loadParticipants(tournament)
+		}
+		
 	}
 	
 	getLink(s) {

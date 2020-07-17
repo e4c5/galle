@@ -56,14 +56,14 @@ class Players extends React.Component {
 	
 	onSelect(player) {
 		const participants = this.context.participants;
-		if(player.id in participants) {
+		if(Object.values(participants).some(p => { p.player.id = player.id})) {
 			this.setState({'message': 'Already added'})
 		}
 		else {
 			axios.post(`/api/${this.context.tournament.id}/participant/`, {player_id: player.id}).then(
 					response => { 
 						this.setState({message: '', userInput: '', rating: ''});
-						this.context.setParticipants({...this.context.participants, [player.id]: response.data})
+						this.context.addParticipant(response.data)
 					});
 		}
 	}
