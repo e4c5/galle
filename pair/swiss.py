@@ -26,7 +26,7 @@ class Pairing:
         self.pairs = []
                 
     def make_it(self):
-        if len(self.pairs)%2 == 1:
+        if len(self.pairs) % 2 == 1:
             raise InvalidOperation('Odd number of players')
         
         if self.next_round == 1:
@@ -242,7 +242,7 @@ class DbPairing(Pairing):
             ).select_related('opponent','opponent__player','game')
 
 
-        for pl in Participant.objects.select_related().filter(tournament_id=self.tournament):
+        for pl in Participant.objects.select_related().filter(tournament_id=self.tournament).exclude(offed=True):
             opponents = []
             spread = 0
             wins = 0
@@ -279,5 +279,6 @@ class DbPairing(Pairing):
 if __name__ == '__main__': #pragma nocover
 
     p = DbPairing(18, 2)
-    for match in p.make_it():
-        print(match[0]['name'], match[1]['name'])
+    
+    for i, match in enumerate(p.make_it()):
+        print(i, match[0]['name'], match[1]['name'])

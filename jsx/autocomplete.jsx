@@ -13,7 +13,6 @@ class Autocomplete extends React.Component {
 				activeSuggestion: 0,
 				filteredSuggestions: [],
 				showSuggestions: false,
-				userInput: ""
 		};
 	}
 
@@ -21,29 +20,30 @@ class Autocomplete extends React.Component {
 		const { suggestions } = this.props;
 		const userInput = e.currentTarget.value;
 		let filteredSuggestions = [];
+		
 		if(userInput.length > 2) {
 			filteredSuggestions = suggestions.filter(
 					suggestion =>
 					suggestion.full_name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
 			);
-		}
-
-		this.setState({
-			activeSuggestion: 0,
-			filteredSuggestions,
-			showSuggestions: true,
-			userInput: e.currentTarget.value
-		});
 	
+			this.setState({
+				activeSuggestion: 0,
+				filteredSuggestions,
+				showSuggestions: true,
+			});
+		}
+		
+		this.props.onChange(e);
 	};
 
-	onClick = e => {
+	onClick(e, player) {
 		this.setState({
 			activeSuggestion: 0,
 			filteredSuggestions: [],
 			showSuggestions: false,
-			userInput: e.currentTarget.innerText
 		});
+		this.props.onSelect(player)
 	};
 	
 	onKeyDown = e => {
@@ -53,8 +53,9 @@ class Autocomplete extends React.Component {
 			this.setState({
 				activeSuggestion: 0,
 				showSuggestions: false,
-				userInput: filteredSuggestions[activeSuggestion]
 			});
+			this.props.onSelect(filteredSuggestions[activeSuggestion])
+			
 		} else if (e.keyCode === 38) {
 			if (activeSuggestion === 0) {
 				return;
@@ -78,30 +79,33 @@ class Autocomplete extends React.Component {
 			state: {
 				activeSuggestion,
 				filteredSuggestions,
-				showSuggestions,
-				userInput
+				showSuggestions
 			}
 		} = this;
+		
 		let suggestionsListComponent;
+		let userInput = this.props.userInput
 		
 		if (showSuggestions && userInput) {
 			if (filteredSuggestions.length) {
 				suggestionsListComponent = (
 						<table className="suggestions">
-						{filteredSuggestions.map((suggestion, index) => {
-							let className;
-
-							if (index === activeSuggestion) {
-								className = "suggestion-active";
-							}
-
-							return (
-									<tr className={className} key={suggestion.full_name} onClick={onClick}>
-									   <td>{suggestion.full_name}</td>
-									   <td>{suggestion.national_rating}</td>
-									</tr>
-							);
-						})}
+						  <thead><tr><th>Player Name</th><th>Rating</th></tr></thead>
+						  <tbody>
+							{filteredSuggestions.map((suggestion, index) => {
+								let className;
+								if (index === activeSuggestion) {
+									className = "suggestion-active";
+								}
+	
+								return (
+										<tr className={className} key={suggestion.full_name} onClick={e => this.onClick(e, suggestion)}>
+										   <td>{suggestion.full_name}</td>
+										   <td>{suggestion.national_rating}</td>
+										</tr>
+								);
+							})}
+						  </tbody>	
 						</table>
 				);
 			} else {
@@ -111,13 +115,8 @@ class Autocomplete extends React.Component {
 
 		return (
 				<React.Fragment>
-				<input
-				type="text"
-					onChange={onChange}
-				onKeyDown={onKeyDown}
-				value={userInput}
-				/>
-				{suggestionsListComponent}
+					<input 	type="text"	onChange={onChange}	onKeyDown={onKeyDown} value={this.props.userInput} />
+				    {suggestionsListComponent}
 				</React.Fragment>
 		);
 	}

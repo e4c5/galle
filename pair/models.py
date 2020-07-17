@@ -252,6 +252,9 @@ class Participant(models.Model):
             return ""
 
 
+    class Meta:
+        unique_together = ['player', 'tournament']
+
 class RoundResult(models.Model):
     ''' 
     The result of a single round in a tournament. 

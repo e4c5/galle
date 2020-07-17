@@ -19,6 +19,7 @@ def tsh_to_json_data(f):
     rounds = 0;
 
     for seed, line in enumerate(f):
+        
         if line and len(line) > 30 :
        
             rating = re.search('[0-9]{1,4} ', line).group(0).strip()
