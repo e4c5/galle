@@ -11,5 +11,10 @@ pair/static/js/main.js
 pair/static/js/context.js
 pair/static/js/autocomplete.js
 pair/static/js/players.js
-
 pair/static/js/players.js
+scratch.py
+thailand.txt
+package-lock.json
+.coverage
+.pydevproject
+htmlcov
