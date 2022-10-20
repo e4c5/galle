@@ -2,3 +2,11 @@
 .error {color: #fff;}
 
 form > .row {margin-bottom: 10px}
+.suggestions {
+	position: absolute;
+	z-index: 1;
+}
+
+.suggestion-active {
+  background-color: #f1f1f1;
+}

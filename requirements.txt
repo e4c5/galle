@@ -4,3 +4,4 @@ djangorestframework==3.9.4
 pkg-resources==0.0.0
 pytz==2019.1
 sqlparse==0.3.0
+django-debug-toolbar

@@ -14,21 +14,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.conf import settings
 
-from rest_framework.routers import DefaultRouter
 from pair import views
-router = DefaultRouter()
-router.register(r'results/(?P<tournament>\d+)', views.ResultViewSet, base_name='tournament')
-router.register(r'standings/(?P<tournament>\d+)', views.StandingsViewSet, base_name='tournament')
-router.register(r'', views.TournamentViewSet, base_name='tournament')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tournament/<slug:slug>/', views.tournament),
-    path('api/', include(router.urls)),
     path('', views.home),
+    path('tournament', views.home),
+    path('tournament/<slug:slug>/', views.home),
+    re_path('^tournament/.*', views.home),
+    
+    path('api/', include('api.urls')),
+    
     path('start/', views.start),
+    path('import/', views.import_tsh),
     path('start/<slug:slug>/', views.start),
 ]
+
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+
+        # For django versions before 2.0:
+        # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+    ] + urlpatterns 

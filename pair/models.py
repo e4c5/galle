@@ -10,12 +10,20 @@ from django.db.models import Sum
 
 class Player(models.Model):
     '''
-    This is someone who has taken part in at least one tournament
-    conducted by the Sri Lanka Scrabble League
+    A list of all known players.
+    This table needs to be rather complicated because we cannot have records
+    of all the tournaments that a player has taken part in. If we did we 
+    could have simply used a join to get that data.
     '''
     full_name = models.TextField()
     country = models.TextField(default='SL')
-    slug = models.TextField(unique=True)
+    slug = models.TextField(unique=True, blank=True)
+    wespa_rating = models.IntegerField(null=True)
+    national_rating = models.IntegerField(null=True)
+    wespa_games = models.IntegerField(default=0)
+    national_games = models.IntegerField(default=0)
+    last_national = models.DateField(null=True)
+    last_wespa = models.DateField(null=True)
     
     def __str__(self):
         return self.full_name
@@ -91,7 +99,7 @@ class Player(models.Model):
    
 
 class Tournament(models.Model):
-    ''' A tournament can sometimes have many sections, they can be rate or unrates.
+    ''' A tournament can sometimes have many sections, they can be rated or unrated.
     But one thing for sure they will have at least two players
     '''
     start_date = models.TextField()
@@ -147,8 +155,10 @@ class Tournament(models.Model):
         That is the round that is in progress. None if the tournament has concluded. 
         '''
         try:
-            rnd = self.rounds.filter(roundresult__score_for=None).order_by('-round_no')[0]
-            return rnd.round_no
+            if self.rounds.all()[0].roundresult_set.count() > 0:
+                rnd = self.rounds.filter(roundresult__score_for=None).order_by('-round_no')[0]
+                return rnd.round_no
+            return 0
         except IndexError:
             return None
         
@@ -163,8 +173,10 @@ class TournamentRound(models.Model):
     SWISS = "SWISS"
     KOTH = "KOTH"
     RANDOM = "RANDOM"
+    MANUAL = "MANUAL"
+    
     PAIRING_CHOICES = ([ROUND_ROBIN, 'Round Robin'], [SWISS, 'Swiss'],
-                       [KOTH, 'KOTH'], [RANDOM, 'Random'])
+                       [KOTH, 'KOTH'], [RANDOM, 'Random'], [MANUAL,"Manual"])
     
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rounds')
     round_no = models.IntegerField()
@@ -219,7 +231,7 @@ class Participant(models.Model):
     games = models.IntegerField(default=0, null=True)
     wins = models.FloatField(default=0, null=True)
 
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='participants')
 
     spread = models.IntegerField(default=0, null=True)
     position = models.IntegerField(default=0, null=True)
@@ -228,15 +240,9 @@ class Participant(models.Model):
 
     @classmethod
     def get_by_player(self, player_name, tournament):
-        pt = slugify(tournament.name) + slugify(player_name)
-        p = cache.get('PTCT_{0}'.format(pt))  # @UndefinedVariable
-        if p :
-            return p
-        
         player, created = Player.get_by_name(player_name)
         participant, created = Participant.objects.get_or_create(tournament=tournament, player=player)
         
-        cache.set('PTCT_{0}'.format(pt), participant) 
         return participant
         
     def __str__(self):
@@ -245,6 +251,9 @@ class Participant(models.Model):
         except :
             return ""
 
+
+    class Meta:
+        unique_together = ['player', 'tournament']
 
 class RoundResult(models.Model):
     ''' 

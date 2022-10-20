@@ -1,63 +1,97 @@
+/**
+ * Tournament settings.
+ * 
+ * This includes the number of rounds, whether rated or not and the
+ * pairing system used for each round.
+ */
 class Settings extends React.Component {
+	static contextType = TournamentContext
+	 
 	constructor(props) {
 		super(props);
-		this.state = {'tournament': props.tournament, 'errors': ''}
+		this.state = {errors: '', ready: false}
+		
 	}
 	
+	componentDidMount() {
+		if(this.context.tournament !== null) {
+			/* copying props into state is bad but we really do need this
+			 * in order to be able to use the same component for create and update
+			 */
+			this.setState({tournament: {...this.context.tournament}, ready : true})
+		}
+		else {
+			this.setState({tournament: {start_date:'', rounds:[], name:''}, ready: true})
+		}
+	}
+	
+	/**
+	 * Change one of the round configurations.
+	 */
 	handleChange(evt, idx) {
-		let tournament = Object.assign({}, this.state.tournament)
-		tournament.rounds[idx][evt.target.name] = evt.target.value;
-		this.setState({tournament: tournament});
+		const rounds = [...this.state.tournament.rounds]
+		rounds[idx][evt.target.name] = evt.target.value;
+
+		this.setState({tournament: {...tournament, rounds: rounds}});
 	}
 	
+	/**
+	 * Event handler for title field 
+	 */
 	titleChange(evt) {
-		let tournament = Object.assign({}, this.state.tournament)
-		tournament.name = evt.target.value;
-		this.setState({tournament: tournament});
+		this.setState({tournament: {...this.state.tournament, name: evt.target.value }});
 	}
+	
 	
 	/**
 	 * Event listener for the number of rounds control
 	 */
 	roundsChange(evt) {
-		let target = evt.target;
-		if(target.value > 0 && target.value < 51) {
-			let tournament = Object.assign({}, this.state.tournament)
-			if(target.value > tournament.rounds.length) {
-				for(var i = tournament.rounds.length ; i < target.value ; i ++) {
+		let value = evt.target.value;
+		if(value > 0 && value < 51) {
+			const tournament = {...this.state.tournament }
+			
+			if(value > tournament.rounds.length) {
+				for(var i = tournament.rounds.length ; i < value ; i ++) {
 					tournament.rounds.push({based_on: i, round_no: i + 1,
 						pairing_system: 'SWISS', spread_cap: 1000})
 				}
 			}
 			else {
-				tournament.rounds = tournament.rounds.slice(target.value)
+				tournament.rounds = tournament.rounds.slice(value)
 			}
-			this.setState({'tournament': tournament})
+			this.setState({tournament: tournament})
 		}
 		else {
 			this.setState({'errors': 'The number of rounds should be less than 50 and more than 0'})
 		} 
 	}
 	
+	/**
+	 * Event handler for the rated checkbox
+	 */
 	ratedChanged(evt) {
-		let tournament = Object.assign({}, this.state.tournament)
-		tournament.rated = evt.target.value;
-		this.setState({'tournament': tournament})
+		this.setState({tournament: {...this.state.tournament, rated: evt.target.value }});
 	}
 
+	/**
+	 * event handler for the date field in the form
+	 */
 	dateChange(evt) {
-		let tournament = Object.assign({}, this.state.tournament)
-		tournament.start_date = evt.target.value;
-		this.setState({'tournament': tournament})
+		this.setState({tournament: {...this.state.tournament, start_date: evt.target.value }});
 	}
 	
+	/**
+	 * Sbmit the form.
+	 */
 	submitForm(evt) {
 		evt.preventDefault();
-		this.props.updateTournament(evt, this.state.tournament);
+		axios.post('/api/', this.state.tournament).then(
+				response => { console.log("Tournament updated") });
 	}
 	
 	render() {
-		if(this.state.tournament.rounds) {
+		if(this.state.ready) {
 			let button = null;
 			if(this.state.tournament.rounds.length == 0 || this.state.tournament.name == '') {
 				button = <input type='submit' className='btn btn-primary' value='Submit' disabled/>
@@ -66,6 +100,7 @@ class Settings extends React.Component {
 				button = <input type='submit' className='btn btn-primary' value='Submit' /> 
 			}	
 			return(<div>
+			    {this.state.tournament.id ? <h1>Edit Settings</h1> : <h1>Create new tournament</h1>}
 				{this.state.errors &&  <div className='alert alert-error'>{this.state.errors}</div>  }
 					<form className="form" onSubmit={evt => this.submitForm(evt) }>
 						<div className='row align-items-center'>
@@ -81,11 +116,13 @@ class Settings extends React.Component {
 						    <div className='col-2'>Number of rounds</div>
 						    <div className='col-2'><input type="number" onChange={evt => this.roundsChange(evt)} className='form-control' /></div>
 						    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-						       <label className="btn btn-secondary active">
-						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' checked /> Rated
+						       <label className="btn btn-secondary">
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} value={1} 
+						    	      name='rated' checked={this.state.rated == 1} /> Rated
 						       </label>
 						       <label className="btn btn-secondary">	 
-						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} name='rated' /> Unrated
+						    	 <input type='radio' onChange={evt => this.ratedChanged(evt)} 
+						    	     name='rated'  checked={this.state.rated == 0} value={0} /> Unrated
 						       </label>
 						    </div>
 						</div>
@@ -112,6 +149,7 @@ class Settings extends React.Component {
 					  ))}
 						{button}
 					</form>
+					<Players />
 				</div>)
 		}
 		else {

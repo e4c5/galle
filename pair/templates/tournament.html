@@ -2,13 +2,14 @@
 
 {% block body %}
 <div class='container-fluid'>
-    <div id='root-settings' data-tournament='{{ tournament.pk }}' data-round='{{ round }}'></div>
+    <div id='root-settings' ></div>
 </div> 
 {% endblock %} 
 {% block js %}
-  <script  src="/static/js/pairing.js"></script>
-  <script  src="/static/js/settings.js"></script>
-  <script  src="/static/js/standings.js"></script>
-  <script src="/static/js/controller.js"></script>
-
+  <script src="/static/js/context.js"></script>
+  <script src="/static/js/player.js"></script>
+  <script src="/static/js/pairing.js"></script>
+  <script src="/static/js/settings.js"></script>
+  <script src="/static/js/standings.js"></script>
+  <script src="/static/js/main.js"></script>
 {% endblock %}
