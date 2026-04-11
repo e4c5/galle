@@ -1,3 +1,5 @@
+//npx babel --watch jsx --out-dir pair/static/js/ --presets react-app/dev 
+
 const Router = window.ReactRouterDOM.BrowserRouter;
 const Route =  window.ReactRouterDOM.Route;
 const Link =  window.ReactRouterDOM.Link;
